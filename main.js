@@ -48,7 +48,7 @@ function loadProducts(){
                     </ul>
                 </div>
             </div>
-            </div>
+            
         
             `;
 
