@@ -16,7 +16,7 @@ function loadProducts(){
 
           individual_template += `
             
-            <div class="col-lg-4 col-md-6 col-sm-10 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 <div class="minimal_product_item">
                     <div class="tab-content">
                         <div id="ptab1_1" class="tab-pane active">
