@@ -1,6 +1,8 @@
 
 
 loadProducts();
+loadUser();
+
 function loadProducts(){
     
     var individual_template = ``;
@@ -43,7 +45,7 @@ function loadProducts(){
                     </ul>
                     <ul class="product_action_btns ul_li_block clearfix">
                         
-                        <li><a class="tooltips" data-placement="right" title="Add To Cart" href="#!"><i class="fal fa-shopping-basket"></i></a></li>
+                        <li onclick="addToCart(`+myJson[c].id+`,`+myJson[c].sale_price+`)"><a class="tooltips" data-placement="right" title="Add To Cart" href="#!"><i class="fal fa-shopping-basket"></i></a></li>
                         <li><a class="tooltips" data-placement="right" title="Quick View" href="#!" data-toggle="modal" data-target="#quickview_modal_`+myJson[c].id+`"><i class="fal fa-search"></i></a></li>
                     </ul>
                 </div>
@@ -120,11 +122,149 @@ function loadProducts(){
         $("#quick_modal_group").prepend(individual_modal_template);
 
 
-    });
-
-        
-    
-
-    
+    });              
 
 }
+function addToCart(itemid, sale_price){
+
+
+	console.log(itemid, sale_price);
+	if(checkCurrentToken() != null){	
+		// add to card live
+
+		var currentToken = localStorage.getItem('cubo_app_token');
+		var email = localStorage.getItem('cubo_login_email');
+
+		console.log("item_id",itemid);
+		console.log("email",email);
+		console.log("token",currentToken);
+
+
+		$.ajax({
+			type: 'POST',
+			url: 'https://cubo.market/api/addToCart',
+			contentType: 'application/json',
+			headers: {
+			   'Authorization': 'Bearer ' + currentToken
+			   
+			},
+			data: {
+				'email':email,
+				'product_id': itemid,
+
+				
+				
+	
+			},
+			success: function(data) {		
+				
+				
+	
+				console.log(data);
+		
+			}
+		}).always(function(jqXHR, textStatus) {
+			if (textStatus != "success") {
+				alert("Error: " + jqXHR.statusText);
+			}
+		});
+
+		
+		
+	}else{
+
+		location.href = 'login.html';
+
+	}
+
+
+
+}
+
+function checkCurrentToken(){
+
+	var token_got =  localStorage.getItem('cubo_app_token');	
+	return token_got;
+}
+
+function loadUser(){
+
+	
+	if(checkCurrentToken() != null){
+		var loginInfo_name = localStorage.getItem('cubo_login_name');
+		
+		
+		document.getElementById("user_name_display").innerHTML = loginInfo_name;
+		document.getElementById("user_type_name").innerHTML = "Current Login";
+		
+
+		document.getElementById("settings_options").style.visibility = 'visible';
+		document.getElementById("settings_options_guest").style.visibility = 'hidden';
+
+		
+	}else{
+
+		document.getElementById("user_name_display").innerHTML = "Guest";
+		document.getElementById("user_type_name").innerHTML = " ";
+
+		document.getElementById("settings_options").style.visibility = 'hidden';
+		document.getElementById("settings_options_guest").style.visibility = 'visible';
+
+	}
+
+
+
+
+}
+
+function logout_user(){
+
+
+		
+	var currentToken = localStorage.getItem('cubo_app_token');
+
+	$.ajax({
+		type: 'POST',
+		url: 'https://cubo.market/api/logout',
+		contentType: 'application/json',
+		headers: {
+		   'Authorization': 'Bearer ' + currentToken
+		},
+		data: {
+			
+			
+			
+
+		},
+		success: function(data) {		
+			
+			alert(data["message"]);
+			
+			localStorage.removeItem('cubo_login_updated_at');
+			localStorage.removeItem('cubo_login_status');
+			localStorage.removeItem('cubo_login_name');
+			localStorage.removeItem('cubo_login_created_at');
+			localStorage.removeItem('cubo_login_info');
+			localStorage.removeItem('cubo_login_user_type');
+			localStorage.removeItem('cubo_login_email');
+			localStorage.removeItem('cubo_app_token');
+			localStorage.removeItem('cubo_login_affiliate_code');
+
+			localStorage.removeItem('cubo_login_upline_affiliate_code');
+			localStorage.removeItem('cubo_login_email_verified_at');
+			localStorage.removeItem('cubo_login_affiliate_id');
+			localStorage.removeItem('cubo_login_id');
+
+
+			location.href = 'login.html';
+	
+		}
+	}).always(function(jqXHR, textStatus) {
+		if (textStatus != "success") {
+			alert("Error: " + jqXHR.statusText);
+		}
+	});
+
+
+}
+
