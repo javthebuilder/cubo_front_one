@@ -2,13 +2,15 @@
 
 loadProducts();
 loadUser();
+loadCurrentCart();
 
 function loadProducts(){
     
     var individual_template = ``;
     var individual_modal_template = ``;
 
-    fetch('https://cubo.market/api/all_merchant_products/20')
+    // fetch('http://127.0.0.1:8000/api/all_merchant_products/20')
+	fetch('http://127.0.0.1:8000/api/all_merchant_products/1')
     .then((response) => {
         return response.json();
     })
@@ -22,7 +24,7 @@ function loadProducts(){
                 <div class="minimal_product_item">
                     <div class="tab-content">
                         <div id="ptab1_1" class="tab-pane active">
-                            <img src="https://cubo.market/`+myJson[c].image_one+`" alt="image_not_found">
+                            <img src="http://127.0.0.1:8000/`+myJson[c].image_one+`" alt="image_not_found">
                         </div>
                         
                     </div>
@@ -53,6 +55,7 @@ function loadProducts(){
             
         
             `;
+			
 
             individual_modal_template += `
             
@@ -63,7 +66,7 @@ function loadProducts(){
 							<span aria-hidden="true">&times;</span>
 						</button>
 						<div class="item_image">
-							<img src="https://cubo.market/`+myJson[c].image_one+`" alt="image_not_found">
+							<img src="http://127.0.0.1:8000/`+myJson[c].image_one+`" alt="image_not_found">
 						</div>
 						<div class="item_content">
 							<h2 class="item_title mb_15">`+myJson[c].name+`</h2>
@@ -83,18 +86,23 @@ function loadProducts(){
 							</p>
 							<div class="quantity_form mb_30 clearfix">
 								<strong class="list_title">Quantity:</strong>
-								<div class="quantity_input">
+								<div class="quantity_input" id="quantity_input_`+myJson[c].id+`">
 									<form action="#">
 										<span class="input_number_decrement">–</span>
-										<input class="input_number" type="text" value="1">
+										<input class="input_number"  id="input_number_`+myJson[c].id+`" type="text" value="1">
 										<span class="input_number_increment">+</span>
 									</form>
 								</div>
 							</div>
 							<ul class="btns_group ul_li mb_30 clearfix">
-								<li><a href="#!" class="custom_btn bg_carparts_red">Add to Cart</a></li>
-								<li><a href="#!" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare Product"><i class="fal fa-sync"></i></a></li>
-								<li><a href="#!" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add To Wishlist"><i class="fal fa-heart"></i></a></li>
+
+								<li onclick = "addToCartWithQuantity(`+myJson[c].id+`,`+myJson[c].sale_price+`)">
+									<a href="#!" onclick = "addToCartWithQuantity(`+myJson[c].id+`,`+myJson[c].sale_price+`)" class="custom_btn bg_carparts_red">Add to Cart</a>
+								</li>
+
+								<li onclick="clearCart(`+myJson[c].id+`, );"><a href="#!" data-toggle="tooltip" data-placement="top" title="" data-original-title="Compare Product"><i class="fal fa-sync"></i></a></li>
+
+								<li style="display:none;"><a href="#!" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add To Wishlist"><i class="fal fa-heart"></i></a></li>
 							</ul>
 							<ul class="info_list ul_li_block clearfix">
 								<li><strong class="list_title">Category:</strong> <a href="#!">` + myJson[c].categories[2].name +`, ` + myJson[c].categories[3].name +`</a></li>
@@ -125,42 +133,215 @@ function loadProducts(){
     });              
 
 }
-function addToCart(itemid, sale_price){
+
+function loadCurrentCart(){    
+
+	$("#current_cart_items").html("");
+	var email = localStorage.getItem('cubo_login_email');
+	var currentToken = localStorage.getItem('cubo_app_token');
+	
+
+	$.ajax({
+		type: 'POST',
+		url: 'http://127.0.0.1:8000/api/viewMyCartWeb/'+email,
+		contentType: 'application/json',
+		headers: {			   
+			   'Content-Type': 'application/json',
+			'Accept': 'application/json',
+			'Authorization': 'Bearer '+ currentToken,			   
+		},
+		data: {
+			'email':email,
+			
+		},
+		success: function(onJson) {		
+
+			var individual_template_cart = ``;
+			var sub_total = 0.00;
+			for(var c = 0 ; c < onJson.length ; c++){
+
+				sub_total+= (onJson[c].sale_price * onJson[c].quantity);
+	
+				individual_template_cart += `
+				  
+	  
+				  <li>
+					  <div class="item_image">
+						  <img src="http://127.0.0.1:8000/`+onJson[c].image_one+`" alt="image_not_found">
+					  </div>
+					  <div class="item_content">
+						  <h4 class="item_title">`+onJson[c].name+`</h4>
+						  <span class="item_price"> `+onJson[c].quantity +` X &#8369;`+onJson[c].sale_price+`</span>
+						  <span class="quantity"> &#8369;`+ (onJson[c].sale_price * onJson[c].quantity).toFixed(2) +`</span>
+					  </div>
+					  <button type="button" class="remove_btn" onclick="clearCart(`+onJson[c].id+`, );"><i class="fal fa-trash-alt"></i></button>
+				  </li>			  
+			  
+				  `;	  
+			  }
+			  
+			  
+			  $("#current_cart_items").html("");
+			  $("#current_cart_items").prepend(individual_template_cart);
 
 
-	console.log(itemid, sale_price);
+			  $("#item_count_web").html(``+onJson.length+``);
+			  $("#item_count_mobile").html(``+onJson.length+``);
+
+			  $("#checkout_subtotal").html(``+sub_total.toFixed(2)+``);
+			  $("#checkout_total").html(``+sub_total.toFixed(2)+``);
+	
+		}
+		}).always(function(jqXHR, textStatus) {
+		if (textStatus != "success") {
+
+
+			$("#snackbar").html(``);
+			$("#snackbar").html(`
+			<h4 style="color:red">Not currently login</h4>
+			`);
+
+
+			 // Get the snackbar DIV
+			var x = document.getElementById("snackbar");
+
+			// Add the "show" class to DIV
+			x.className = "show";
+
+			// After 3 seconds, remove the show class from DIV
+			setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+		}
+	})
+	;
+
+
+}
+
+function clearCart(itemid, sale_price){
+
+
+	
+	if(checkCurrentToken() != null){	
+		// add to card live
+
+		var currentToken = localStorage.getItem('cubo_app_token');
+		var email = localStorage.getItem('cubo_login_email');	
+
+
+		$.ajax({
+			type: 'POST',
+			url: 'http://127.0.0.1:8000/api/addToCartWeb/'+email+'/'+itemid+'/0',
+			contentType: 'application/json',
+			headers: {			   
+			   	'Content-Type': 'application/json',
+        		'Accept': 'application/json',
+        		'Authorization': 'Bearer '+ currentToken,			   
+			},
+			data: {
+				'email':email,
+				'product_id': itemid,						
+			},
+			success: function(data) {		
+
+				loadCurrentCart();
+				
+				
+		
+			}
+		}).always(function(jqXHR, textStatus) {
+			if (textStatus != "success") {
+				alert("Error: " + jqXHR.statusText);
+			}
+		});
+
+		
+		
+	}else{
+
+		location.href = 'login.html';
+
+	}
+
+
+
+}
+function addToCartWithQuantity(itemid, sale_price){
+	console.log('addToCartWithQuantity');
+	
+	$("#current_cart_items").html("");
+	
 	if(checkCurrentToken() != null){	
 		// add to card live
 
 		var currentToken = localStorage.getItem('cubo_app_token');
 		var email = localStorage.getItem('cubo_login_email');
 
-		console.log("item_id",itemid);
-		console.log("email",email);
-		console.log("token",currentToken);
-
+		
+		var quantity = document.getElementById("input_number_" + itemid).value;
 
 		$.ajax({
 			type: 'POST',
-			url: 'https://cubo.market/api/addToCart',
+			url: 'http://127.0.0.1:8000/api/addToCartWeb/'+email+'/'+itemid+'/'+quantity,
 			contentType: 'application/json',
-			headers: {
-			   'Authorization': 'Bearer ' + currentToken
-			   
+			headers: {			   
+			   	'Content-Type': 'application/json',
+        		'Accept': 'application/json',
+        		'Authorization': 'Bearer '+ currentToken,			   
 			},
 			data: {
 				'email':email,
-				'product_id': itemid,
-
-				
-				
-	
+				'product_id': itemid,						
 			},
 			success: function(data) {		
-				
-				
+
+				loadCurrentCart();	
+		
+			}
+		}).always(function(jqXHR, textStatus) {
+			if (textStatus != "success") {
+				alert("Error: " + jqXHR.statusText);
+			}
+		});
+
+		
+		$('#quickview_modal_' + itemid ).modal('hide');
+		
+	}else{
+
+		location.href = 'login.html';
+
+	}
+
+
+
+}
+
+function addToCart(itemid, sale_price){
 	
-				console.log(data);
+	$("#current_cart_items").html("");
+	
+	if(checkCurrentToken() != null){	
+		// add to card live
+
+		var currentToken = localStorage.getItem('cubo_app_token');
+		var email = localStorage.getItem('cubo_login_email');
+
+		$.ajax({
+			type: 'POST',
+			url: 'http://127.0.0.1:8000/api/addToCartWeb/'+email+'/'+itemid+'/1',
+			contentType: 'application/json',
+			headers: {			   
+			   	'Content-Type': 'application/json',
+        		'Accept': 'application/json',
+        		'Authorization': 'Bearer '+ currentToken,			   
+			},
+			data: {
+				'email':email,
+				'product_id': itemid,						
+			},
+			success: function(data) {		
+
+				loadCurrentCart();	
 		
 			}
 		}).always(function(jqXHR, textStatus) {
@@ -225,7 +406,7 @@ function logout_user(){
 
 	$.ajax({
 		type: 'POST',
-		url: 'https://cubo.market/api/logout',
+		url: 'http://127.0.0.1:8000/api/logout',
 		contentType: 'application/json',
 		headers: {
 		   'Authorization': 'Bearer ' + currentToken

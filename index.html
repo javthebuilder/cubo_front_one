@@ -53,6 +53,50 @@
 		<!-- custom - css include -->
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
+		<style>
+			#snackbar {
+			  visibility: hidden;
+			  min-width: 250px;
+			  margin-left: -125px;
+			  background-color: #333;
+			  color: #fff;
+			  text-align: center;
+			  border-radius: 2px;
+			  padding: 16px;
+			  position: fixed;
+			  z-index: 1;
+			  left: 50%;
+			  bottom: 30px;
+			  font-size: 17px;
+			}
+			
+			#snackbar.show {
+			  visibility: visible;
+			  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			}
+			
+			@-webkit-keyframes fadein {
+			  from {bottom: 0; opacity: 0;} 
+			  to {bottom: 30px; opacity: 1;}
+			}
+			
+			@keyframes fadein {
+			  from {bottom: 0; opacity: 0;}
+			  to {bottom: 30px; opacity: 1;}
+			}
+			
+			@-webkit-keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;} 
+			  to {bottom: 0; opacity: 0;}
+			}
+			
+			@keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;}
+			  to {bottom: 0; opacity: 0;}
+			}
+			</style>
+
 	</head>
 
 
@@ -94,7 +138,7 @@
 									<li>
 										<button type="button" class="cart_btn">
 											<i class="fal fa-shopping-cart"></i>
-											<span class="btn_badge">0</span>
+											<span class="btn_badge" id="item_count_mobile">0</span>
 										</button>
 									</li>
 									<li><button type="button" class="mobile_menu_btn"><i class="far fa-bars"></i></button></li>
@@ -128,7 +172,7 @@
 										<div class="dropdown_content">
 											<div class="profile_info clearfix">
 												<div class="user_thumbnail">
-													<img src="https://cubo.market/img/account/user.png" alt="thumbnail_not_found">
+													<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
 													
 													
 												</div>
@@ -151,7 +195,7 @@
 								<li>
 									<button type="button" class="cart_btn">
 										<i class="fal fa-shopping-cart"></i>
-										<span class="btn_badge">0</span>
+										<span class="btn_badge" id="item_count_web">0</span>
 									</button>
 								</li>
 							</ul>
@@ -188,18 +232,34 @@
 				<div class="cart_sidebar">
 					<button type="button" class="close_btn"><i class="fal fa-times"></i></button>
 
+					<ul class="cart_items_list ul_li_block mb_30 clearfix" id="current_cart_items">
+						
+						<!-- <li>
+							<div class="item_image">
+								<img src="https://jthemes.net/themes/html/neoncart/assets/images/cart/img_01.jpg" alt="image_not_found">
+							</div>
+							<div class="item_content">
+								<h4 class="item_title">Yellow Blouse</h4>
+								<span class="item_price">$30.00</span>
+							</div>
+							<button type="button" class="remove_btn"><i class="fal fa-trash-alt"></i></button>
+						</li> -->
+						
+
+					</ul>
+
 				
 
 					<ul class="total_price ul_li_block mb_30 clearfix">
 						<li>
 							<span>Subtotal:</span>
-							<span>0.00</span>
+							<span id="checkout_subtotal">0.00</span>
 						</li>
 						
 						
 						<li>
 							<span>Total:</span>
-							<span>0.00</span>
+							<span id="checkout_total">0.00</span>
 						</li>
 					</ul>
 
@@ -455,7 +515,7 @@
 							<div class="minimal_product_item">
 								<div class="tab-content">
 									<div id="ptab6_1" class="tab-pane active">
-										<img src="https://cubo.market/images/store/productimage/I1-1649245986.jpeg" alt="image_not_found">
+										<img src="http://127.0.0.1:8000/images/store/productimage/I1-1649245986.jpeg" alt="image_not_found">
 									</div>
 									<div id="ptab6_2" class="tab-pane fade">
 										<img src="assets/images/shop/minimal/img_07.jpg" alt="image_not_found">
@@ -491,7 +551,7 @@
 							<div class="minimal_product_item">
 								<div class="tab-content">
 									<div id="ptab7_1" class="tab-pane active">
-										<img src="https://cubo.market/images/store/productimage/I1-1650504890.jpeg" alt="image_not_found">
+										<img src="http://127.0.0.1:8000/images/store/productimage/I1-1650504890.jpeg" alt="image_not_found">
 									</div>
 									<div id="ptab7_2" class="tab-pane fade">
 										<img src="assets/images/shop/minimal/img_08.jpg" alt="image_not_found">
@@ -527,7 +587,7 @@
 							<div class="minimal_product_item">
 								<div class="tab-content">
 									<div id="ptab8_1" class="tab-pane active">
-										<img src="https://cubo.market/images/store/productimage/I1-1649245620.jpg" alt="image_not_found" >
+										<img src="http://127.0.0.1:8000/images/store/productimage/I1-1649245620.jpg" alt="image_not_found" >
 									</div>																	
 								</div>
 								<div class="item_content">
@@ -748,6 +808,7 @@
 		<!-- footer_section - end
 		================================================== -->
 
+		<div id="snackbar"></div>
 		
 		<!-- fraimwork - jquery include -->
 		<script src="assets/js/jquery-3.5.1.min.js"></script>
@@ -789,6 +850,7 @@
 		<script src="assets/js/custom.js"></script>
 
 		<script src="main.js"></script>
+		
 		<div id="quick_modal_group">
 
 
