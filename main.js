@@ -10,7 +10,7 @@ function loadProducts(){
     var individual_modal_template = ``;
 
     // fetch('http://127.0.0.1:8000/api/all_merchant_products/20')
-	fetch('http://127.0.0.1:8000/api/all_merchant_products/1')
+	fetch('http://127.0.0.1:8000/api/all_merchant_products/20')
     .then((response) => {
         return response.json();
     })
@@ -244,6 +244,7 @@ function clearCart(itemid, sale_price){
 			success: function(data) {		
 
 				loadCurrentCart();
+				loadCurrentCart_Checkout();
 				
 				
 		
