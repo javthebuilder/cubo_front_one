@@ -325,23 +325,7 @@
 						<li id="step_3_marker" ><a href="shop_checkout_step3.html"><span>03.</span> Order Completed</a></li>
 					</ul>
 
-					<div class="cart_table mb_50" id="shopping_cart_table">
-						<table class="table">
-							<thead class="text-uppercase bg-white border-bottom">
-								<tr>
-									<th>Photo</th>
-									<th>Product Name</th>
-									<th>Quantity</th>
-									<th>Price</th>
-								</tr>
-							</thead>
-							<tbody id="tbody_checkout">
-								
-
-							</tbody>
-						</table>
-					</div>
-					<div class="billing_form mb_50">
+					<div class="billing_form mb_50" id="billing_form" style="display: none;">
 						<h3 class="form_title mb_30">Billing details</h3>
 						<form action="#">
 							<div class="form_wrap">
@@ -350,21 +334,21 @@
 									<div class="col-lg-6">
 										<div class="form_item">
 											<span class="input_title">First Name<sup>*</sup></span>
-											<input type="text" name="firstname">
+											<input type="text" name="firstname" id="firstname">
 										</div>
 									</div>
 				
 									<div class="col-lg-6">
 										<div class="form_item">
 											<span class="input_title">Last Name<sup>*</sup></span>
-											<input type="text" name="lastname">
+											<input type="text" name="lastname"  id="lastname">
 										</div>
 									</div>
 								</div>
 				
 								<div class="form_item">
 									<span class="input_title">Company Name</span>
-									<input type="text" name="company">
+									<input type="text" name="company" id="company">
 								</div>
 				
 								<div class="option_select">
@@ -382,9 +366,9 @@
                                 <div class="row">
 
                                     <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label for="input_checkout_full_address">Full Address *</label>
-                                            <input class="form-control" type="text" id="input_checkout_full_address" name="input_checkout_full_address" value="">
+                                        <div class="form_item">
+                                            <span class="input_title">Select Full Address</span>
+                                            <input  type="text" id="input_checkout_full_address" name="input_checkout_full_address" value="">
                                             <p id="input_checkout_full_address_warning" style="color:red; display:none">Please provide full_address.</p>
                                         </div>
                                     </div>
@@ -403,12 +387,19 @@
 				
 								<div class="form_item">
 									<span class="input_title">Town/City<sup>*</sup></span>
-									<input type="text" name="city">
+									<input type="text" name="checkout_city" id="checkout_city">
 								</div>                
 				
 								<div class="form_item">
 									<span class="input_title">Postcode / Zip<sup>*</sup></span>
-									<input type="text" name="postcode">
+									<input type="text" name="postal_code" id="postal_code">
+								</div>
+
+								<div class="form_item">
+									
+									<input type="text" name="checkout_address_latitude" id="checkout_address_latitude">
+									<input type="text" name="checkout_address_longtitude" id="checkout_address_longtitude">
+									
 								</div>
 				
 								<div class="form_item">
@@ -419,17 +410,33 @@
 								<div class="form_item">
 									<span class="input_title">Email Address<sup>*</sup></span>
 									<input type="email" name="email">
-								</div>               
-								<hr>               
-				
+								</div>               							
 								<div class="form_item mb-0">
 									<span class="input_title">Order notes<sup>*</sup></span>
-									<textarea name="note" placeholder="Note about your order, eg. special notes fordelivery."></textarea>
+									<textarea name="delivery_landmark_notes" placeholder="Note about your order, eg. special notes fordelivery."  id="delivery_landmark_notes"></textarea>
 								</div>
 				
 							</div>
 						</form>
 					</div>
+
+					<div class="cart_table mb_50" id="shopping_cart_table">
+						<table class="table">
+							<thead class="text-uppercase bg-white border-bottom">
+								<tr>
+									<th>Photo</th>
+									<th>Product Name</th>
+									<th>Quantity</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody id="tbody_checkout">
+								
+
+							</tbody>
+						</table>
+					</div>
+				
 
 
 					<div class="row justify-content-lg-end" id="cart_total_summary">
@@ -718,6 +725,7 @@
 
             componentRestrictions: {
                 country: "ph",
+				
 
             },
             fields: ['geometry', 'name'],
@@ -752,10 +760,14 @@
 
 
     function geocode(){
+
         // Prevent actual submit
         //console.log("geocode start");
 
         var location = document.getElementById('input_checkout_full_address').value;
+		
+		localStorage.setItem("cubo_checkout_delivery_location", location);
+		
 
         axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
           params:{
@@ -766,69 +778,70 @@
         .then(function(response){
 
 
-          // Formatted Address
-          var formattedAddress = response.data.results[0].formatted_address;
+
+			// Formatted Address
+			var formattedAddress = response.data.results[0].formatted_address;
+			
+
+			var formattedAddressOutput = `
+			${formattedAddress}          `;
 
 
-        var formattedAddressOutput = `
-            ${formattedAddress}          `;
+
+			// Address Components
+			var addressComponents = response.data.results[0].address_components;
+			var addressComponentsOutput = '';
+			for(var i = 0;i < addressComponents.length;i++){
+				addressComponentsOutput += `
+				${addressComponents[i].types[0]} : ${addressComponents[i].long_name}
+				`;
+				//
+				var type_data = addressComponents[i].types[0];
+			switch(type_data) {
+					case 'plus_code':
+						premise = addressComponents[i].long_name;
+					break;
+					case 'subpremise':
+						subpremise = '' + addressComponents[i].long_name;
+					break;
+					case 'premise':
+					premise = '' + addressComponents[i].long_name;
+					break;
+
+					case 'street_number':
+					street_number = '' + addressComponents[i].long_name;
+					break;
+
+					case 'route':
+					route = '' + addressComponents[i].long_name;
+					break;
+
+					case 'political':
+					political = '' + addressComponents[i].long_name;
+					break;
+
+					case 'locality':
+					locality = '' + addressComponents[i].long_name;
+					break;
+
+					case 'administrative_area_level_2':
+					administrative_area_level_2 = '' + addressComponents[i].long_name;
+					break;
+
+					case 'administrative_area_level_1':
+					administrative_area_level_1 = '' + addressComponents[i].long_name;
+					break;
+
+					case 'country':
+					country = '' + addressComponents[i].long_name;
+					break;
+
+					case 'postal_code':
+					postal_code = '' + addressComponents[i].long_name;
+					break;
 
 
-
-          // Address Components
-          var addressComponents = response.data.results[0].address_components;
-          var addressComponentsOutput = '';
-          for(var i = 0;i < addressComponents.length;i++){
-            addressComponentsOutput += `
-              ${addressComponents[i].types[0]} : ${addressComponents[i].long_name}
-            `;
-            //
-            var type_data = addressComponents[i].types[0];
-           switch(type_data) {
-                case 'plus_code':
-                    premise = addressComponents[i].long_name;
-                break;
-                case 'subpremise':
-                    subpremise = '' + addressComponents[i].long_name;
-                break;
-                case 'premise':
-                premise = '' + addressComponents[i].long_name;
-                break;
-
-                case 'street_number':
-                street_number = '' + addressComponents[i].long_name;
-                break;
-
-                case 'route':
-                route = '' + addressComponents[i].long_name;
-                break;
-
-                case 'political':
-                political = '' + addressComponents[i].long_name;
-                break;
-
-                case 'locality':
-                locality = '' + addressComponents[i].long_name;
-                break;
-
-                case 'administrative_area_level_2':
-                administrative_area_level_2 = '' + addressComponents[i].long_name;
-                break;
-
-                case 'administrative_area_level_1':
-                administrative_area_level_1 = '' + addressComponents[i].long_name;
-                break;
-
-                case 'country':
-                country = '' + addressComponents[i].long_name;
-                break;
-
-                case 'postal_code':
-                postal_code = '' + addressComponents[i].long_name;
-                break;
-
-
-            }
+				}
 
           }
 
@@ -846,7 +859,7 @@
 
 
 
-            $("#checkout_city option[value='"+locality+"']").attr('selected', 'selected');
+            
 
             var first_line =
                 (street_number == null || street_number == ''  ? '' :  (street_number + ', ')) + "" +
@@ -870,8 +883,23 @@
             $('#checkout_addressline3').val(third_line);
 
 
-            $('#checkout_address_latitude').val(destination_lat);
-            $('#checkout_address_longtitude').val(destination_lng);
+            $('#checkout_address_latitude').val(destination_lat);			
+            $('#checkout_address_longtitude').val(destination_lng);			
+			$('#checkout_city').val(locality);
+			$('#postal_code').val(postal_code);
+
+			
+			
+			
+			localStorage.setItem("cubo_checkout_addressline1", first_line);
+			localStorage.setItem("cubo_checkout_addressline2", second_line);
+			localStorage.setItem("cubo_checkout_addressline3", third_line);
+
+			localStorage.setItem("cubo_checkout_address_latitude", destination_lat);
+			localStorage.setItem("cubo_checkout_address_longtitude", destination_lng);
+			localStorage.setItem("cubo_checkout_city", locality);
+			localStorage.setItem("cubo_checkout_country", country);
+			localStorage.setItem("cubo_checkout_postal_code", postal_code);
 
 
             delivery_info_check();
@@ -885,6 +913,185 @@
 
 
     }
+
+	function delivery_info_check(){
+		console.log("delivery_info_check");
+		/*
+		delivery_name = document.getElementById('checkout_name').value;
+		delivery_address = document.getElementById('checkout_address').value;
+		delivery_city = document.getElementById('checkout_city').selectedIndex;
+		delivery_barangay = document.getElementById('checkout_barangay').value;
+		delivery_notes_landmark = document.getElementById('checkout_notes_landmark').value;
+
+
+		delivery_name_warning = document.getElementById('delivery_name_warning');
+		delivery_address_warning = document.getElementById('delivery_address_warning');
+		delivery_city_warning = document.getElementById('delivery_city_warning');
+		delivery_barangay_warning = document.getElementById('delivery_barangay_warning');
+
+		delivery_name_warning.style.display = 'none';
+		delivery_address_warning.style.display = 'none';
+		delivery_city_warning.style.display = 'none';
+		delivery_barangay_warning.style.display = 'none';
+
+
+		if(delivery_name.trim() == ""){
+
+			delivery_name_warning.style.display = 'block';
+
+		}else if(delivery_address.trim() == ""){
+
+			delivery_address_warning.style.display = 'block';
+
+		}else if(delivery_city == 0){
+
+			delivery_city_warning.style.display = 'block';
+		}
+		else if(delivery_barangay.trim() == ""){
+
+			delivery_barangay_warning.style.display = 'block';
+		}else{
+			save_delivery_info();
+		}*/
+		save_delivery_info();
+	}
+	function save_delivery_info(){
+
+		delivery_name = (document.getElementById('firstname').value + ' ' + document.getElementById('lastname').value);
+	
+		delivery_address = localStorage.getItem('cubo_checkout_delivery_location');
+		delivery_city_text = localStorage.getItem('cubo_checkout_city');
+		delivery_barangay = '';//document.getElementById('checkout_barangay').value;
+
+		var delivery_landmark_notes = document.getElementById('delivery_landmark_notes').value;
+		localStorage.setItem("cubo_delivery_landmark_notes", delivery_landmark_notes);
+		delivery_landmark_notes = localStorage.getItem('cubo_delivery_landmark_notes');
+
+		localStorage.setItem("cubo_checkout_notes_landmark", delivery_landmark_notes);
+		localStorage.setItem("cubo_checkout_name", (document.getElementById('firstname').value + ' ' + document.getElementById('lastname').value));
+		localStorage.setItem("cubo_checkout_company", document.getElementById('company').value );
+
+		let order_shipping_modal = document.getElementById('order-shipping');
+		var currentToken = localStorage.getItem('cubo_app_token');
+
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+			$.ajax({
+				type:'POST',
+				url:'/checkout_delivery_info/set',
+				data:{
+					'_token': currentToken,
+					'delivery_name' : delivery_name,
+					'delivery_address' : delivery_address,
+					'delivery_city' : delivery_city_text,
+					'delivery_barangay' : delivery_barangay,
+					'delivery_landmark_notes' : delivery_landmark_notes
+				},
+				success:function(data) {
+
+					console.log(data);
+					/*
+					document.getElementById("delivery_name_show").innerHTML = delivery_name;
+					document.getElementById("delivery_address_show").innerHTML = delivery_address;
+					document.getElementById("delivery_barangay_show").innerHTML = delivery_barangay;
+					document.getElementById("delivery_city_show").innerHTML = delivery_city_text;
+					document.getElementById("delivery_landmark_notes_show").innerHTML = delivery_landmark_notes;
+
+					$('#order-shipping').modal('hide');
+					*/
+				}
+
+			});
+
+			
+	$.ajax({
+		type: 'POST',
+		url: 'http://127.0.0.1:8000/api/viewMyCartWeb/'+email,
+		contentType: 'application/json',
+		headers: {			   
+			   'Content-Type': 'application/json',
+			'Accept': 'application/json',
+			'Authorization': 'Bearer '+ currentToken,			   
+		},
+		data: {
+					'delivery_name' : delivery_name,
+					'delivery_address' : delivery_address,
+					'delivery_city' : delivery_city_text,
+					'delivery_barangay' : delivery_barangay,
+					'delivery_landmark_notes' : delivery_landmark_notes
+			
+		},
+		success: function(onJson) {		
+
+			var individual_template_cart = ``;
+			var sub_total = 0.00;
+			for(var c = 0 ; c < onJson.length ; c++){
+
+				sub_total+= (onJson[c].sale_price * onJson[c].quantity);
+	
+				individual_template_cart += `
+				  
+	  
+				  <li>
+					  <div class="item_image">
+						  <img src="http://127.0.0.1:8000/`+onJson[c].image_one+`" alt="image_not_found">
+					  </div>
+					  <div class="item_content">
+						  <h4 class="item_title">`+onJson[c].name+`</h4>
+						  <span class="item_price"> `+onJson[c].quantity +` X &#8369;`+onJson[c].sale_price+`</span>
+						  <span class="quantity"> &#8369;`+ (onJson[c].sale_price * onJson[c].quantity).toFixed(2) +`</span>
+					  </div>
+					  <button type="button" class="remove_btn" onclick="clearCart(`+onJson[c].id+`, );"><i class="fal fa-trash-alt"></i></button>
+				  </li>			  
+			  
+				  `;	  
+			  }
+			  
+			  
+			  $("#current_cart_items").html("");
+			  $("#current_cart_items").prepend(individual_template_cart);
+
+
+			  $("#item_count_web").html(``+onJson.length+``);
+			  $("#item_count_mobile").html(``+onJson.length+``);
+
+			  $("#checkout_subtotal").html(``+sub_total.toFixed(2)+``);
+			  $("#checkout_total").html(``+sub_total.toFixed(2)+``);
+	
+		}
+		}).always(function(jqXHR, textStatus) {
+		if (textStatus != "success") {
+
+
+			$("#snackbar").html(``);
+			$("#snackbar").html(`
+			<h4 style="color:red">Not currently login</h4>
+			`);
+
+
+			 // Get the snackbar DIV
+			var x = document.getElementById("snackbar");
+
+			// Add the "show" class to DIV
+			x.className = "show";
+
+			// After 3 seconds, remove the show class from DIV
+			setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+		}
+	})
+	;
+
+
+
+
+
+	}
+
+
+	
 
     </script>
 

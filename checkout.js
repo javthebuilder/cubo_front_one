@@ -4,9 +4,14 @@ var individual_template_checkout_cart = ``;
 
 
 if(current_checkout_step == null || current_checkout_step == 1){
-    loadCurrentCart_Checkout();
+	
+     
+	$("#billing_form").hide();  
+	loadCurrentCart_Checkout();
+
 }else if(current_checkout_step == 2){
 
+	$("#billing_form").show();  
     proceedStepTwo();
 }
 
@@ -287,12 +292,13 @@ function proceedStepTwo(){
 					</div>
                         `;
                         //$("#shopping_cart_table").html(step_2_form);
-                        $("#shopping_cart_table").append(billing_form_summarry);
+                        $("#shopping_cart_table").prepend(billing_form_summarry);
 
                         
                         $("#cart_total_summary").hide();
 
                         localStorage.setItem("cubo_current_checkout_step", 2);
+						$("#billing_form").show();  
 	
 		}
 		});
