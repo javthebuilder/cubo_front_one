@@ -25,7 +25,7 @@ function login() {
 
 		},
 		success: function(data) {		
-			console.log(data);
+			//console.log(data);
 			localStorage.setItem("cubo_app_token", data["token"]);
 			localStorage.setItem("cubo_login_info", data["user"]);
 			localStorage.setItem("cubo_login_affiliate_id", data["user"]["affiliate_id"]);

@@ -44,7 +44,7 @@ function loadCurrentCart_Checkout(){
 			for(var c = 0 ; c < onJson.length ; c++){
 
 				sub_total+= (onJson[c].sale_price * onJson[c].quantity);
-                console.log((onJson[c].sale_price * onJson[c].quantity) + ' - ' + onJson[c].quantity);
+                //console.log((onJson[c].sale_price * onJson[c].quantity) + ' - ' + onJson[c].quantity);
     
 				individual_template_checkout_cart += `		    			  
 
@@ -151,7 +151,7 @@ function proceedStepTwo(){
             checkout_cart_items_json = onJson;
 
 			for(var c = 0 ; c < onJson.length ; c++){
-                console.log(onJson);
+                //console.log(onJson);
 
 				sub_total+= (onJson[c].sale_price * onJson[c].quantity);                
     
@@ -188,93 +188,8 @@ function proceedStepTwo(){
               
               
     var step_2_form = 
-    `<div class="billing_form mb_50">
-        <h3 class="form_title mb_30">Billing details</h3>
-        <form action="#">
-            <div class="form_wrap">
-
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form_item">
-                            <span class="input_title">First Name<sup>*</sup></span>
-                            <input type="text" name="firstname">
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="form_item">
-                            <span class="input_title">Last Name<sup>*</sup></span>
-                            <input type="text" name="lastname">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">Company Name<sup>*</sup></span>
-                    <input type="text" name="company">
-                </div>
-
-                <div class="option_select">
-                    <span class="input_title">Country<sup>*</sup></span>
-                    <select name="country" style="display: none;">
-                        <option value="PH" selected="">Philippines</option>
-                        
-                    </select><div class="nice-select" tabindex="0">
-                    <span class="current">Philippines</span>
-                    <ul class="list">
-                        <li data-value="PH" class="option selected">Philippines</li>                        
-                    </ul></div>
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">Address<sup>*</sup></span>
-                    <input type="text" name="address" placeholder="House number and street name">
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">Town/City<sup>*</sup></span>
-                    <input type="text" name="city">
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">County<sup>*</sup></span>
-                    <input type="text" name="county">
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">Postcode / Zip<sup>*</sup></span>
-                    <input type="text" name="postcode">
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">Phone<sup>*</sup></span>
-                    <input type="tel" name="phone">
-                </div>
-
-                <div class="form_item">
-                    <span class="input_title">Email Address<sup>*</sup></span>
-                    <input type="email" name="email">
-                </div>
-
-                <div class="checkbox_item">
-                    <label for="account_create_checkbox"><input id="account_create_checkbox" type="checkbox"> Create an account?</label>
-                </div>
-
-                <hr>
-
-                <div class="checkbox_item mb_30">
-                    <label for="ship_address_checkbox"><input id="ship_address_checkbox" type="checkbox"> Ship to a different address?</label>
-                </div>
-
-                <div class="form_item mb-0">
-                    <span class="input_title">Order notes<sup>*</sup></span>
-                    <textarea name="note" placeholder="Note about your order, eg. special notes fordelivery."></textarea>
-                </div>
-
-            </div>
-        </form>
-    </div>`;
-    console.log(checkout_cart_items_display);
+    ``;
+    //console.log(checkout_cart_items_display);
     var billing_form_summarry = `
     <div class="billing_form">
 						<h3 class="form_title mb_30">Your order</h3>
@@ -302,7 +217,7 @@ function proceedStepTwo(){
 												<td>
 													<span class="subtotal_text">Subtotal</span>
 												</td>
-												<td><span class="total_price">$414.00</span></td>
+												<td><span class="total_price">&#8369;`+sub_total.toFixed(2)+`</span></td>
 											</tr>
 
 											<tr>
@@ -371,7 +286,7 @@ function proceedStepTwo(){
 						</form>
 					</div>
                         `;
-                        $("#shopping_cart_table").html(step_2_form);
+                        //$("#shopping_cart_table").html(step_2_form);
                         $("#shopping_cart_table").append(billing_form_summarry);
 
                         
