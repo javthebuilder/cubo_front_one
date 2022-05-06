@@ -189,6 +189,7 @@ function proceedStepTwo(){
 			  }
 			  
 			  net_total = sub_total + shipping_fee;
+			  localStorage.setItem("cubo_checkout_sub_total", sub_total);
               
               
               
@@ -226,19 +227,42 @@ function proceedStepTwo(){
 											</tr>
 
 											<tr>
+												<td></td>
+												<td></td>
+												<td>
+													<span class="subtotal_text">Shipping Fee</span>
+												</td>
+												<td><span class="total_price" id="shipping-fee">0.00</span></td>
+											</tr>
+
+
+											<tr>
+												<td></td>
+												<td></td>
+												<td>
+													<span class="subtotal_text">Transaction Fee</span>
+												</td>
+												<td><span class="total_price" id="transaction-fee">0.00</span></td>
+											</tr>
+
+											<tr>
 												
 												<td>
 													<span class="subtotal_text">Shipping</span>
 												</td>
 												<td class="" colspan="4" align="left">
 													<div class="">
-														<label for="shipping_checkbox"><input id="shipping_checkbox" type="checkbox" checked=""> Free Shipping</label>
+														<label for="shipping_checkbox">
+															<input id="shipping_checkbox_store_pickup" type="radio" checked="checked" name="shipping_method" onchange="saveLocalCheckoutInfo('cubo_checkout_delivery_method', 'shipping_checkbox_store_pickup')"> Store Pickup
+															</label>
 													</div>
 													<div class="">
-														<label for="flatrate_checkbox"><input id="flatrate_checkbox" type="checkbox"> Flat rate: $15.00</label>
+														<label for="flatrate_checkbox">
+														<input id="shipping_checkbox_lalamove" type="radio" name="shipping_method" onchange="saveLocalCheckoutInfo('cubo_checkout_delivery_method', 'shipping_checkbox_lalamove')"> Lalamove: <span id="shipping_fee_lalamove_display"> Calculating... </span></label>
 													</div>
 													<div class="">
-														<label for="localpickup_checkbox"><input id="localpickup_checkbox" type="checkbox"> Local Pickup: $8.00</label>
+														<label for="localpickup_checkbox">
+														<input id="shipping_checkbox_self_delivery" type="radio" name="shipping_method" onchange="saveLocalCheckoutInfo('cubo_checkout_delivery_method', 'shipping_checkbox_self_delivery')"> Store Self Delivery</label>
 													</div>
 												</td>
 											</tr>
@@ -250,7 +274,7 @@ function proceedStepTwo(){
 												<td></td>
 												<td></td>
 												<td>
-													<span class="total_price">$135.00</span>
+													<span class="total_price" id="total-price-with-shipping-fee"></span>
 												</td>
 											</tr>
 										</tbody>
@@ -259,32 +283,26 @@ function proceedStepTwo(){
 
 								<div class="billing_payment_mathod">
 									<ul class="ul_li_block clearfix">
+										
 										<li>
-											<div class="checkbox_item mb_15 pl-0">
-												<label for="bank_transfer_checkbox"><input id="bank_transfer_checkbox" type="checkbox" checked=""> Direct Bank Transfer</label>
-											</div>
-											<p class="mb-0">
-												Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-											</p>
-										</li>
-
-										<li>
-											<div class="checkbox_item mb-0 pl-0">
-												<label for="check_payments"><input id="check_payments" type="checkbox">Check Payments</label>
+											<div class="radio_item mb-0 pl-0">
+												<label onclick="selecteddivpayment('payment-method-1', 1, 'COD (Cash On Delivery)');">
+													<input type="radio" name="pay" id="payment-method-1" checked="checked"> COD (Cash On Delivery) 
+												</label>
 											</div>
 										</li>
 										<li>
-											<div class="checkbox_item mb-0 pl-0">
-												<label for="cash_delivery"><input id="cash_delivery" type="checkbox"> Cash On Delivery</label>
-											</div>
-										</li>
-										<li>
-											<div class="checkbox_item mb-0 pl-0">
-												<label for="paypal_checkbox"><input id="paypal_checkbox" type="checkbox"> Paypal <a href="#!"><img class="paypal_image" src="assets/images/payment_methods_03.png" alt="image_not_found"></a></label>
+											<div class="radio_item mb-0 pl-0">
+												<label onclick="selecteddivpayment('payment-method-3', 3, 'Credit Card / Debit Card');">
+													<input type="radio" name="pay"  id="payment-method-3"> Credit Card / Debit Card 
+													<a href="#!">
+													<img class="paypal_image" src="assets/images/payment_methods_03.png" alt="image_not_found">
+													</a>
+												</label>
 											</div>
 										</li>
 									</ul>
-									<button type="submit" class="custom_btn bg_default_red">PLACE ORDER</button>
+									<button type="button" class="custom_btn bg_default_red" onclick="save_delivery_info();">PLACE ORDER</button>
 								</div>
 
 							</div>
@@ -310,5 +328,82 @@ function proceedStepTwo(){
     $("#shopping_cart_table").html(``);
     
 
+
+}
+
+function selecteddivpayment(element_id, method_id, method_name){
+	console.log(element_id, method_id, method_name);
+	radiobtn = document.getElementById(element_id);
+	radiobtn.checked = true;
+
+	localStorage.setItem("cubo_checkout_payment_selected", method_name);
+
+	getLalamoveQuotationAmount();
+	changePaymentSelected(method_id, method_name);
+
+}
+
+function changePaymentSelected(method_id, method_name){
+
+	
+	current_cart_total = parseFloat(localStorage.getItem('cubo_checkout_sub_total'));
+	console.log( 'current cart total:' + current_cart_total);
+
+	current_shipping_fee = 0;
+	if(localStorage.getItem('cubo_checkout_delivery_method') == "lalamove"){
+		console.log("is lalamove true");
+
+		current_shipping_fee =  parseFloat(localStorage.getItem('cubo_checkout_lalamove_shipping_fee'));
+		localStorage.setItem('cubo_checkout_shipping_fee', current_shipping_fee)
+
+	}else{
+		console.log("is lalamove false");
+
+		localStorage.setItem('cubo_checkout_shipping_fee', 0.00)
+
+		
+		document.getElementById("shipping-fee").innerHTML = numberWithComma(0.00)
+	}
+	
+
+
+	gross_total = parseFloat(current_cart_total) + parseFloat(current_shipping_fee);
+	
+	if(method_id == 3 || method_name == "Credit Card / Debit Card"  || localStorage.getItem('cubo_checkout_payment_selected') == "Credit Card / Debit Card"){
+
+		with_transaction_fee =  (gross_total+15)/0.955;
+		transaction_fee = with_transaction_fee - gross_total;
+		overall_total = transaction_fee + gross_total;
+
+		localStorage.setItem("cubo_checkout_transaction_fee", transaction_fee);
+		localStorage.setItem("cubo_checkout_total_price_with_shipping", overall_total);
+		document.getElementById("transaction-fee").innerHTML = numberWithComma(transaction_fee)
+		document.getElementById("total-price-with-shipping-fee").innerHTML = numberWithComma(overall_total)
+	}else{
+
+		transaction_fee = 0.00;
+		overall_total = transaction_fee + gross_total;
+		localStorage.setItem("cubo_checkout_transaction_fee", transaction_fee);
+		localStorage.setItem("cubo_checkout_total_price_with_shipping", overall_total);
+
+		document.getElementById("transaction-fee").innerHTML = numberWithComma(transaction_fee)
+		document.getElementById("total-price-with-shipping-fee").innerHTML = numberWithComma(overall_total)
+
+	}
+
+
+
+
+
+
+}
+
+function numberWithComma(n) {
+
+	var valueString = n; //can be 1500.0 or 1500.00
+	var amount = parseFloat(valueString).toFixed(2);
+	var formattedString = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	//console.log(formattedString); //outputs 1,500.00
+	return formattedString;
 
 }
