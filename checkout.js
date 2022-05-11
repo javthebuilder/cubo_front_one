@@ -21,6 +21,7 @@ function loadCurrentCart_Checkout(){
     console.log("loadCurrentCart_Checkout");
 
 	$("#current_cart_items").html("");
+	$("#tbody_checkout").html(``);
 	var email = localStorage.getItem('cubo_login_email');
 	var currentToken = localStorage.getItem('cubo_app_token');
 	
@@ -46,60 +47,89 @@ function loadCurrentCart_Checkout(){
             var shipping_fee = 0.00;
             checkout_cart_items_json = onJson;
 
-			for(var c = 0 ; c < onJson.length ; c++){
+			if(onJson.length == 0){
+				//set to checkout part 1
+				localStorage.setItem("cubo_current_checkout_step", 1);
+				window.location.href = "/"; 
+				/*
+				localStorage.setItem("cubo_current_checkout_refresh", 1);
 
-				sub_total+= (onJson[c].sale_price * onJson[c].quantity);
-                //console.log((onJson[c].sale_price * onJson[c].quantity) + ' - ' + onJson[c].quantity);
-    
-				individual_template_checkout_cart += `		    			  
+				if(localStorage.getItem('cubo_current_checkout_refresh') == 1){
 
-                  <tr>
-									<td>
-										<div class="cart_product">
-											<div class="item_image">
-												<img src="http://127.0.0.1:8000/`+onJson[c].image_one+`" alt="`+onJson[c].name+`">
+					localStorage.setItem("cubo_current_checkout_refresh", 0);
+					//window.location.reload();
+				}
+				*/
+					
+				
+
+
+
+			}else{
+
+				for(var c = 0 ; c < onJson.length ; c++){
+
+					sub_total+= (onJson[c].sale_price * onJson[c].quantity);
+					
+	
+		
+					individual_template_checkout_cart += `		    			  
+	
+					  <tr>
+										<td>
+											<div class="cart_product">
+												<div class="item_image">
+													<img src="http://127.0.0.1:8000/`+onJson[c].image_one+`" alt="`+onJson[c].name+`">
+												</div>
+												<div class="item_content">
+													<h6 class="item_title" style="overflow-wrap: break-word;">`+onJson[c].name+`</h6>
+													<span class="item_type">` + onJson[c].categories[3].name +`</span>
+												</div>
+												<button type="button" class="remove_btn"  onclick="clearCartCheckout(`+onJson[c].id+`, `+ (onJson[c].sale_price) +`);">
+													<i class="fal fa-times"></i>
+												</button>
 											</div>
-											<div class="item_content">
-												<h6 class="item_title" style="overflow-wrap: break-word;">`+onJson[c].name+`</h6>
-												<span class="item_type">` + onJson[c].categories[3].name +`</span>
+										</td>
+										<td>
+											<span class="price_text">&#8369;`+ (onJson[c].sale_price) +`</span>
+										</td>
+										<td>
+											<div class="quantity_input">
+												<form action="#">
+													<span style="display:none;" class="input_number_decrement">–</span>
+													<input class="input_number" type="text" value="`+(onJson[c].quantity)+`" readonly>
+													<span style="display:none;" class="input_number_increment">+</span>
+												</form>
 											</div>
-											<button type="button" class="remove_btn"  onclick="clearCart(`+onJson[c].id+`, );">
-												<i class="fal fa-times"></i>
-											</button>
-										</div>
-									</td>
-									<td>
-										<span class="price_text">&#8369;`+ (onJson[c].sale_price) +`</span>
-									</td>
-									<td>
-										<div class="quantity_input">
-											<form action="#">
-												<span style="display:none;" class="input_number_decrement">–</span>
-												<input class="input_number" type="text" value="`+(onJson[c].quantity)+`" readonly>
-												<span style="display:none;" class="input_number_increment">+</span>
-											</form>
-										</div>
-									</td>
-									<td><span class="total_price">&#8369;`+ (onJson[c].sale_price * onJson[c].quantity).toFixed(2) +`</span></td>
-								</tr>
-			  
-				  `;
-                  
-			  }
+										</td>
+										<td><span class="total_price">&#8369;`+ ((onJson[c].sale_price * onJson[c].quantity).toFixed(2) == NaN ? "0.00" : 
+										(onJson[c].sale_price * onJson[c].quantity).toFixed(2)
+										) +`</span></td>
+									</tr>
+				  
+					  `;
+					  
+				  }
+
+			}
+
+			
 			  
 			  net_total = sub_total + shipping_fee;
 
-			  $("#tbody_checkout").html("");
+			  $("#tbody_checkout").html(``);
 			  $("#tbody_checkout").prepend(individual_template_checkout_cart);
+			
+			  console.log("sub_total:"+sub_total);
 
-
-			  $("#checkout_page_subtotal").html(`` + sub_total.toFixed(2) +``);
-              $("#checkout_page_net_total").html(`` + net_total.toFixed(2) +``);
+			  $("#checkout_page_subtotal").html(`` + (sub_total == NaN ? "0.00" : sub_total.toFixed(2)) +``);
+              $("#checkout_page_net_total").html(`` + (net_total == NaN ? "0.00" : net_total.toFixed(2)) +``);
 			  
-/*
+				/*
 			  $("#checkout_subtotal").html(``+sub_total.toFixed(2)+``);
 			  $("#checkout_total").html(``+sub_total.toFixed(2)+``);
               */
+			  
 	
 		}
 		}).always(function(jqXHR, textStatus) {
@@ -371,14 +401,21 @@ function changePaymentSelected(method_id, method_name){
 	
 	if(method_id == 3 || method_name == "Credit Card / Debit Card"  || localStorage.getItem('cubo_checkout_payment_selected') == "Credit Card / Debit Card"){
 
-		with_transaction_fee =  (gross_total+15)/0.955;
-		transaction_fee = with_transaction_fee - gross_total;
-		overall_total = transaction_fee + gross_total;
+		with_transaction_fee =  ((gross_total.toString() == "NaN" ? 0.00 : gross_total)+15)/0.955;
 
-		localStorage.setItem("cubo_checkout_transaction_fee", transaction_fee);
-		localStorage.setItem("cubo_checkout_total_price_with_shipping", overall_total);
-		document.getElementById("transaction-fee").innerHTML = numberWithComma(transaction_fee)
-		document.getElementById("total-price-with-shipping-fee").innerHTML = numberWithComma(overall_total)
+		
+		transaction_fee = (with_transaction_fee.toString() == "NaN" ? 0.00 : with_transaction_fee) - (gross_total.toString() == "NaN" ? 0.00 : gross_total);
+		overall_total = (transaction_fee.toString() == "NaN" ? 0.00 : transaction_fee) + (gross_total.toString() == "NaN" ? 0.00 : gross_total);
+
+		//(transaction_fee.toString() == "NaN" ? 0.00 : transaction_fee)
+
+		localStorage.setItem("cubo_checkout_transaction_fee", (transaction_fee.toString() == "NaN" ? 0.00 : transaction_fee));
+		localStorage.setItem("cubo_checkout_total_price_with_shipping", (overall_total.toString() == "NaN" ? 0.00 : overall_total));
+		document.getElementById("transaction-fee").innerHTML = numberWithComma((transaction_fee.toString() == "NaN" ? 0.00 : transaction_fee));
+		document.getElementById("total-price-with-shipping-fee").innerHTML = numberWithComma(overall_total.toString() == "NaN" ? "0.00" : overall_total);
+
+
+		console.log("if overall_total:"+overall_total);
 	}else{
 
 		transaction_fee = 0.00;
@@ -386,15 +423,11 @@ function changePaymentSelected(method_id, method_name){
 		localStorage.setItem("cubo_checkout_transaction_fee", transaction_fee);
 		localStorage.setItem("cubo_checkout_total_price_with_shipping", overall_total);
 
-		document.getElementById("transaction-fee").innerHTML = numberWithComma(transaction_fee)
-		document.getElementById("total-price-with-shipping-fee").innerHTML = numberWithComma(overall_total)
+		document.getElementById("transaction-fee").innerHTML = numberWithComma(transaction_fee);
+		console.log("else overall_total:"+overall_total);
+		document.getElementById("total-price-with-shipping-fee").innerHTML = numberWithComma(overall_total.toString() == "NaN" ? "0.00" : overall_total);
 
 	}
-
-
-
-
-
 
 }
 
@@ -407,3 +440,5 @@ function numberWithComma(n) {
 	return formattedString;
 
 }
+
+

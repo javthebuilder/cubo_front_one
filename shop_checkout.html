@@ -149,10 +149,10 @@
 						<div class="col-lg-6">
 							<nav class="main_menu clearfix">
 								<ul class="ul_li_center clearfix">
-									<li><a href="#!">Home</a></li>									
-									<li><a href="#!">Shop</a></li>									
-									<li><a href="#!">About us</a></li>
-									<li><a href="#!">Contact us</a></li>
+									<li><a href="/">Home</a></li>									
+									<li><a href="/">Shop</a></li>									
+									<li><a href="/">About us</a></li>
+									<li><a href="/">Contact us</a></li>
 								</ul>
 							</nav>
 						</div>
@@ -820,11 +820,89 @@
 						changePaymentSelected(1, paymentSelected_saved);
 				
 					}
+					}).always(function(jqXHR, lalamoveStatus) {
+						console.log(jqXHR);
+						if (lalamoveStatus != "success") {
+
+							var error_message = checkBlankInputs();
+							$("#snackbar").html(``);
+							$("#snackbar").html(`
+							<h4 style="color:red">`+error_message+`</h4>
+							`);
+
+
+							// Get the snackbar DIV
+							var x = document.getElementById("snackbar");
+
+							// Add the "show" class to DIV
+							x.className = "show";
+
+							// After 3 seconds, remove the show class from DIV
+							setTimeout(function(){ x.className = x.className.replace("show", ""); }, 10000);
+						}
 					});
 
 					
 
 
+			}
+			function checkBlankInputs(){
+				let toReturn = "";
+				if(checkout_current_step == 2){
+
+					console.log('checkBlankInputs');
+					var fname = localStorage.getItem('cubo_checkout_firstname');
+					if(fname == null){				
+						toReturn += "<br>Firstname is blank.";
+					}
+
+					var lname = localStorage.getItem('cubo_checkout_lastname');
+					if(lname == null){				
+						toReturn += "<br>Lastname is blank.";
+					}					
+
+					var full_add = localStorage.getItem('cubo_checkout_delivery_location');
+					if(full_add == null){				
+						toReturn += "<br>Pick Delivery Location";
+					}
+
+					var city_add = localStorage.getItem('cubo_checkout_city');
+					if(city_add == null){				
+						toReturn += "<br>City not specified";
+					}
+
+					var postal_add = localStorage.getItem('cubo_checkout_postal_code');
+					console.log('postal_add:' + postal_add);
+					if(postal_add == null){				
+
+						toReturn += "<br>Postal Code missing";
+
+					}else if(postal_add+"" == "undefined"){
+
+						toReturn += "<br>Postal Code missing";
+					}
+					
+
+					var phone_add = localStorage.getItem('cubo_checkout_phone');
+					if(phone_add == null){				
+						toReturn += "<br>Contact Phone number not specified";
+					}
+
+			
+
+					var lat_add = localStorage.getItem('cubo_checkout_address_latitude');
+					if(lat_add == null){				
+						toReturn += "<br>Pick Delivery Location";
+					}	
+
+					var lng_add = localStorage.getItem('cubo_checkout_address_longtitude');
+					if(lng_add == null){				
+						toReturn += "<br>Pick Delivery Location";
+					}
+
+				}
+				return toReturn;
+				
 			}
 			function initGoogle(){
 
@@ -1128,10 +1206,12 @@
 
 			}
 			function save_delivery_info(){
+				
+				let proceed = confirm("Are you sure you want to proceed?");
 
-				
-			
-				
+				if (proceed) {
+				//proceed
+
 				delivery_city_text = localStorage.getItem('cubo_checkout_city');
 				delivery_barangay = '';//document.getElementById('checkout_barangay').value;
 
@@ -1234,7 +1314,8 @@
 				})
 				;
 				*/
-				/*
+
+				
 						
 				$.ajax({
 					type: 'POST',
@@ -1246,11 +1327,7 @@
 						'Authorization': 'Bearer '+ currentToken,			   
 					},
 					data: {
-								'delivery_name' : delivery_name,
-								'delivery_address' : delivery_address,
-								'delivery_city' : delivery_city_text,
-								'delivery_barangay' : delivery_barangay,
-								'delivery_landmark_notes' : delivery_landmark_notes
+								
 						
 					},
 					success: function(onJson) {		
@@ -1280,7 +1357,15 @@
 				})
 				;
 
-				*/
+				} else {
+				//don't proceed
+				}
+
+				
+			
+				
+				
+				
 
 
 
@@ -1298,7 +1383,7 @@
 						getLalamoveQuotationAmount();
 
 					}else if(id == 'shipping_checkbox_self_delivery'){
-						localStorage.setItem('cubo_checkout_delivery_method', 'selfdelivery');
+						localStorage.setItem('cubo_checkout_delivery_method', 'selfdelivery');						
 
 					}else{
 						localStorage.setItem('cubo_checkout_delivery_method', 'store_pickup');

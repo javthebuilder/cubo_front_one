@@ -174,7 +174,7 @@ function loadCurrentCart(){
 						  <span class="item_price"> `+onJson[c].quantity +` X &#8369;`+onJson[c].sale_price+`</span>
 						  <span class="quantity"> &#8369;`+ (onJson[c].sale_price * onJson[c].quantity).toFixed(2) +`</span>
 					  </div>
-					  <button type="button" class="remove_btn" onclick="clearCart(`+onJson[c].id+`, );"><i class="fal fa-trash-alt"></i></button>
+					  <button type="button" class="remove_btn" onclick="clearCart(`+onJson[c].id+`, `+onJson[c].sale_price+`);"><i class="fal fa-trash-alt"></i></button>
 				  </li>			  
 			  
 				  `;	  
@@ -221,6 +221,68 @@ function clearCart(itemid, sale_price){
 
 
 	
+	if(checkCurrentToken() != null){	
+		// add to card live
+
+		var currentToken = localStorage.getItem('cubo_app_token');
+		var email = localStorage.getItem('cubo_login_email');	
+
+
+		$.ajax({
+			type: 'POST',
+			url: 'http://127.0.0.1:8000/api/addToCartWeb/'+email+'/'+itemid+'/0',
+			contentType: 'application/json',
+			headers: {			   
+			   	'Content-Type': 'application/json',
+        		'Accept': 'application/json',
+        		'Authorization': 'Bearer '+ currentToken,			   
+			},
+			data: {
+				'email':email,
+				'product_id': itemid,						
+			},
+			success: function(data) {		
+				var currentUrl = window.location.href;
+				console.log("currentUrl:" + currentUrl);
+				$("#tbody_checkout").html(``);
+				loadCurrentCart();
+
+				if(currentUrl == 'http://127.0.0.1:5500/shop_checkout.html'){
+
+					loadCurrentCart_Checkout();
+					window.location.href = currentUrl;
+				}
+				
+				else{}
+
+
+
+				//
+				
+				
+		
+			}
+		}).always(function(jqXHR, textStatus) {
+			if (textStatus != "success") {
+				alert("Error: " + jqXHR.statusText);
+			}
+		});
+
+		
+		
+	}else{
+
+		location.href = 'login.html';
+
+	}
+
+
+
+}
+function clearCartCheckout(itemid, sale_price){
+
+
+	console.log("clearCartCheckout");
 	if(checkCurrentToken() != null){	
 		// add to card live
 
