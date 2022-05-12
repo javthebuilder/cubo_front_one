@@ -852,28 +852,28 @@
 
 					console.log('checkBlankInputs');
 					var fname = localStorage.getItem('cubo_checkout_firstname');
-					if(fname == null){				
+					if(fname == null || fname.trim() == ""){				
 						toReturn += "<br>Firstname is blank.";
 					}
 
 					var lname = localStorage.getItem('cubo_checkout_lastname');
-					if(lname == null){				
+					if(lname == null || lname.trim() == ""){				
 						toReturn += "<br>Lastname is blank.";
 					}					
 
 					var full_add = localStorage.getItem('cubo_checkout_delivery_location');
-					if(full_add == null){				
+					if(full_add == null || full_add.trim() == ""){				
 						toReturn += "<br>Pick Delivery Location";
 					}
 
 					var city_add = localStorage.getItem('cubo_checkout_city');
-					if(city_add == null){				
+					if(city_add == null || city_add.trim() == ""){				
 						toReturn += "<br>City not specified";
 					}
 
 					var postal_add = localStorage.getItem('cubo_checkout_postal_code');
 					console.log('postal_add:' + postal_add);
-					if(postal_add == null){				
+					if(postal_add == null || postal_add.trim() == ""){				
 
 						toReturn += "<br>Postal Code missing";
 
@@ -884,23 +884,84 @@
 					
 
 					var phone_add = localStorage.getItem('cubo_checkout_phone');
-					if(phone_add == null){				
+					if(phone_add == null || phone_add.trim() == ""){				
 						toReturn += "<br>Contact Phone number not specified";
 					}
 
 			
 
 					var lat_add = localStorage.getItem('cubo_checkout_address_latitude');
-					if(lat_add == null){				
+					if(lat_add == null || lat_add.trim() == ""){				
 						toReturn += "<br>Pick Delivery Location";
 					}	
 
 					var lng_add = localStorage.getItem('cubo_checkout_address_longtitude');
-					if(lng_add == null){				
+					if(lng_add == null || lng_add.trim() == ""){				
 						toReturn += "<br>Pick Delivery Location";
 					}
 
 				}
+				return toReturn;
+				
+			}
+
+			function checkBlankInputs_ForDialog(){
+				let toReturn = "";
+				if(checkout_current_step == 2){
+
+					console.log('checkBlankInputs_ForDialog');
+					var fname = localStorage.getItem('cubo_checkout_firstname');
+					if(fname == null || fname.trim() == ""){				
+						toReturn += "\nFirstname is blank.";
+					}
+
+					var lname = localStorage.getItem('cubo_checkout_lastname');
+					if(lname == null || lname.trim() == ""){				
+						toReturn += "\nLastname is blank.";
+					}					
+
+					var full_add = localStorage.getItem('cubo_checkout_delivery_location');
+					if(full_add == null || full_add.trim() == ""){				
+						toReturn += "\nPick Delivery Location";
+					}
+
+					var city_add = localStorage.getItem('cubo_checkout_city');
+					if(city_add == null || city_add.trim() == ""){				
+						toReturn += "\nCity not specified";
+					}
+
+					var postal_add = localStorage.getItem('cubo_checkout_postal_code');
+					console.log('postal_add:' + postal_add);
+					if(postal_add == null || postal_add.trim() == ""){				
+
+						toReturn += "\nPostal Code missing";
+
+					}else if(postal_add+"" == "undefined"){
+
+						toReturn += "\nPostal Code missing";
+					}
+					
+
+					var phone_add = localStorage.getItem('cubo_checkout_phone');
+					if(phone_add == null ||  phone_add.trim() == ""){				
+						toReturn += "\nContact Phone number not specified";
+					}
+
+			
+
+					var lat_add = localStorage.getItem('cubo_checkout_address_latitude');
+					if(lat_add == null || lat_add.trim() == ""){				
+						toReturn += "\nPick Delivery Location";
+					}	
+
+					var lng_add = localStorage.getItem('cubo_checkout_address_longtitude');
+					if(lng_add == null || lng_add.trim() == "" ){				
+						toReturn += "\nPick Delivery Location";
+					}
+
+				}
+
+				console.log("checkBlankInputs_ForDialog | toReturn:" + toReturn);
 				return toReturn;
 				
 			}
@@ -1180,11 +1241,11 @@
 				delivery_barangay_warning.style.display = 'none';
 
 
-				if(delivery_name.trim() == ""){
+				if(delivery_name.trim()() == ""){
 
 					delivery_name_warning.style.display = 'block';
 
-				}else if(delivery_address.trim() == ""){
+				}else if(delivery_address.trim()() == ""){
 
 					delivery_address_warning.style.display = 'block';
 
@@ -1192,7 +1253,7 @@
 
 					delivery_city_warning.style.display = 'block';
 				}
-				else if(delivery_barangay.trim() == ""){
+				else if(delivery_barangay.trim()() == ""){
 
 					delivery_barangay_warning.style.display = 'block';
 				}else{
@@ -1206,163 +1267,201 @@
 
 			}
 			function save_delivery_info(){
+
+				console.log("save_delivery_info()");
+				var error_message = checkBlankInputs_ForDialog();
+
+				console.log("error message:" + error_message);
+
+
+				if(error_message == ""){
+
+					// all is clear for checkout
 				
-				let proceed = confirm("Are you sure you want to proceed?");
+					let proceed = confirm("Checkout Confirmation:\nAre you sure you want to proceed?", "GRND UP Cofirmation");
 
-				if (proceed) {
-				//proceed
+					if (proceed) {
+					//proceed
 
-				delivery_city_text = localStorage.getItem('cubo_checkout_city');
-				delivery_barangay = '';//document.getElementById('checkout_barangay').value;
+					delivery_city_text = localStorage.getItem('cubo_checkout_city');
+					delivery_barangay = '';//document.getElementById('checkout_barangay').value;
 
-				var delivery_landmark_notes = document.getElementById('delivery_landmark_notes').value;
-				localStorage.setItem("cubo_delivery_landmark_notes", delivery_landmark_notes);
-				delivery_landmark_notes = localStorage.getItem('cubo_delivery_landmark_notes');
+					var delivery_landmark_notes = document.getElementById('delivery_landmark_notes').value;
+					localStorage.setItem("cubo_delivery_landmark_notes", delivery_landmark_notes);
+					delivery_landmark_notes = localStorage.getItem('cubo_delivery_landmark_notes');
 
-				localStorage.setItem("cubo_checkout_notes_landmark", delivery_landmark_notes);
-				localStorage.setItem("cubo_checkout_name", (document.getElementById('firstname').value + ' ' + document.getElementById('lastname').value));
-				localStorage.setItem("cubo_checkout_company", document.getElementById('company').value );
+					localStorage.setItem("cubo_delivery_landmark_notes", delivery_landmark_notes);
+					localStorage.setItem("cubo_checkout_name", (document.getElementById('firstname').value + ' ' + document.getElementById('lastname').value));
+					localStorage.setItem("cubo_checkout_company", document.getElementById('company').value );
 
-				let order_shipping_modal = document.getElementById('order-shipping');
-				var currentToken = localStorage.getItem('cubo_app_token');
+					let order_shipping_modal = document.getElementById('order-shipping');
+					var currentToken = localStorage.getItem('cubo_app_token');
 
-				var cubo_login_email = localStorage.getItem('cubo_login_email');
-				var cubo_login_id = localStorage.getItem('cubo_login_id');
+					var cubo_login_email = localStorage.getItem('cubo_login_email');
+					var cubo_login_id = localStorage.getItem('cubo_login_id');
 
 
-				receiver_name = (localStorage.getItem('cubo_checkout_firstname') + ' ' + localStorage.getItem('cubo_checkout_lastname'));
-				receiver_email = localStorage.getItem('cubo_login_email');
-				receiver_phone_no_trimmed = localStorage.getItem('cubo_checkout_phone');
-				receiver_full_address= delivery_address = localStorage.getItem('cubo_checkout_delivery_location');
+					receiver_name = (localStorage.getItem('cubo_checkout_firstname') + ' ' + localStorage.getItem('cubo_checkout_lastname'));
+					receiver_email = localStorage.getItem('cubo_login_email');
+					receiver_phone_no_trimmed = localStorage.getItem('cubo_checkout_phone');
+					receiver_full_address= delivery_address = localStorage.getItem('cubo_checkout_delivery_location');
 
-				destination_lat = localStorage.getItem('cubo_checkout_address_latitude');
-				destination_lng = localStorage.getItem('cubo_checkout_address_longtitude');
-				delivery_remarks = localStorage.getItem('cubo_delivery_landmark_notes');
-				
-				// TODO : 
-				paymentSelected_saved = localStorage.getItem('cubo_checkout_payment_selected');
-				paymentSelected_trimmed = paymentSelected_saved == "COD (Cash On Delivery)" ? "COD" : " ";
+					destination_lat = localStorage.getItem('cubo_checkout_address_latitude');
+					destination_lng = localStorage.getItem('cubo_checkout_address_longtitude');
+					delivery_remarks = localStorage.getItem('cubo_delivery_landmark_notes');
 
-				//paymentSelected_trimmed =  localStorage.getItem('cubo_checkout_payment_selected');
-				delivery_fee =  localStorage.getItem('cubo_checkout_delivery_fee');
-				delivery_method =  localStorage.getItem('cubo_checkout_delivery_method');
+					// TODO : 
+					paymentSelected_saved = localStorage.getItem('cubo_checkout_payment_selected');
+					paymentSelected_trimmed = paymentSelected_saved == "COD (Cash On Delivery)" ? "COD" : " ";
 
-				destination_city = localStorage.getItem('cubo_checkout_city');
-				$destination_zip = localStorage.getItem('cubo_checkout_postal_code');
-				$destination_state = localStorage.getItem('cubo_checkout_administrative_area_level_2');
-				$destination_country = localStorage.getItem('cubo_checkout_country');
+					//paymentSelected_trimmed =  localStorage.getItem('cubo_checkout_payment_selected');
+					delivery_fee =  localStorage.getItem('cubo_checkout_delivery_fee');
+					delivery_method =  localStorage.getItem('cubo_checkout_delivery_method');
 
-				console.log(
-					receiver_name ,
-					receiver_email , 
-					receiver_phone_no_trimmed , 
-					receiver_full_address , 
-					destination_lat , 
-					destination_lng,
-					delivery_remarks , 
-					paymentSelected_trimmed , delivery_fee , 
-					delivery_method , 
-					destination_city , 
-					$destination_zip , 
-					$destination_state , 
-					$destination_country
+					destination_city = localStorage.getItem('cubo_checkout_city');
+					destination_zip = localStorage.getItem('cubo_checkout_postal_code');
+					destination_state = localStorage.getItem('cubo_checkout_administrative_area_level_2');
+					destination_country = localStorage.getItem('cubo_checkout_country');
 
-				);
-				/*
+					console.log(
+						receiver_name ,
+						receiver_email , 
+						receiver_phone_no_trimmed , 
+						receiver_full_address , 
+						destination_lat , 
+						destination_lng,
+						delivery_remarks , 
+						paymentSelected_trimmed , delivery_fee , 
+						delivery_method , 
+						destination_city , 
+						destination_zip , 
+						destination_state , 
+						destination_country
 
-				$.ajax({
-					type: 'POST',
-					url: 'http://127.0.0.1:8000/api/lalamove-integration-api/quotation/web',
-					contentType: 'application/json',
-					headers: {			   
-						'Content-Type': 'application/json',
-						'Accept': 'application/json',
-						'Authorization': 'Bearer '+ currentToken,			   
-					},
-					data: {
-								'delivery_name' : receiver_name,
-								'delivery_address' : receiver_full_address,
-								'delivery_city' : destination_city,
-								'delivery_barangay' : '',
-								'delivery_landmark_notes' : delivery_remarks
+					);
+					/*
+
+					$.ajax({
+						type: 'POST',
+						url: 'http://127.0.0.1:8000/api/lalamove-integration-api/quotation/web',
+						contentType: 'application/json',
+						headers: {			   
+							'Content-Type': 'application/json',
+							'Accept': 'application/json',
+							'Authorization': 'Bearer '+ currentToken,			   
+						},
+						data: {
+									'delivery_name' : receiver_name,
+									'delivery_address' : receiver_full_address,
+									'delivery_city' : destination_city,
+									'delivery_barangay' : '',
+									'delivery_landmark_notes' : delivery_remarks
+							
+						},
+						success: function(onJson) {		
+
+							console.log(onJson);
+
+						}
+						}).always(function(jqXHR, textStatus) {
+						if (textStatus != "success") {
+
+
+							$("#snackbar").html(``);
+							$("#snackbar").html(`
+							<h4 style="color:red">Not currently login</h4>
+							`);
+
+
+							// Get the snackbar DIV
+							var x = document.getElementById("snackbar");
+
+							// Add the "show" class to DIV
+							x.className = "show";
+
+							// After 3 seconds, remove the show class from DIV
+							setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+						}
+					})
+					;
+					*/
+
+
+							
+					$.ajax({
+						type: 'POST',
+						url: 'http://127.0.0.1:8000/api/checkout-order-send-seller-web/20/'+cubo_login_id,
 						
-					},
-					success: function(onJson) {		
+						headers: {							
+							
+							'Authorization': 'Bearer '+ currentToken,			   
+						},
+						data: {
+                        
+                        'receiver_name': receiver_name,
+						'receiver_email': receiver_email,
+						'receiver_phone_no_trimmed' : receiver_phone_no_trimmed,
+						'receiver_full_address' : receiver_full_address,
+						'destination_lat' : destination_lat,
+						'destination_lng' : destination_lng,
+						'delivery_remarks' : delivery_remarks,
+						'paymentSelected_trimmed' : paymentSelected_trimmed,
+						'delivery_fee' : delivery_fee,
+						'delivery_method' : delivery_method,
+						'destination_city' :destination_city, 
+						'destination_zip' : destination_zip,
+						'destination_state' :destination_state ,
+						'destination_country':destination_country
+                      
+                    	},
+						success: function(onJson) {		
 
-						console.log(onJson);
-				
+							console.log(onJson);
+							localStorage.setItem('cubo_current_checkout_order_model', onJson);
+							localStorage.setItem('cubo_current_checkout_step', 3);
+
+							console.log('transaction_model');
+							console.log(localStorage.getItem('cubo_current_checkout_order_model'));
+							
+
+						}
+						}).always(function(jqXHR, textStatus) {
+						if (textStatus != "success") {
+
+
+							$("#snackbar").html(``);
+							$("#snackbar").html(`
+							<h4 style="color:red">`+jqXHR+`</h4>
+							`);
+
+
+							// Get the snackbar DIV
+							var x = document.getElementById("snackbar");
+
+							// Add the "show" class to DIV
+							x.className = "show";
+
+							// After 3 seconds, remove the show class from DIV
+							setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+						}
+					})
+					;
+
+					} else {
+					//don't proceed
 					}
-					}).always(function(jqXHR, textStatus) {
-					if (textStatus != "success") {
 
 
-						$("#snackbar").html(``);
-						$("#snackbar").html(`
-						<h4 style="color:red">Not currently login</h4>
-						`);
 
 
-						// Get the snackbar DIV
-						var x = document.getElementById("snackbar");
+				}else{
+					// not clear to go checkout
+					alert(error_message);
 
-						// Add the "show" class to DIV
-						x.className = "show";
-
-						// After 3 seconds, remove the show class from DIV
-						setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
-					}
-				})
-				;
-				*/
-
-				
-						
-				$.ajax({
-					type: 'POST',
-					url: 'http://127.0.0.1:8000/api/checkout-order-send-seller-web/'+cubo_login_id+'/'+cubo_login_email+'',
-					contentType: 'application/json',
-					headers: {			   
-						'Content-Type': 'application/json',
-						'Accept': 'application/json',
-						'Authorization': 'Bearer '+ currentToken,			   
-					},
-					data: {
-								
-						
-					},
-					success: function(onJson) {		
-
-						console.log(onJson);
-				
-					}
-					}).always(function(jqXHR, textStatus) {
-					if (textStatus != "success") {
-
-
-						$("#snackbar").html(``);
-						$("#snackbar").html(`
-						<h4 style="color:red">Not currently login</h4>
-						`);
-
-
-						// Get the snackbar DIV
-						var x = document.getElementById("snackbar");
-
-						// Add the "show" class to DIV
-						x.className = "show";
-
-						// After 3 seconds, remove the show class from DIV
-						setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
-					}
-				})
-				;
-
-				} else {
-				//don't proceed
 				}
 
+
 				
-			
 				
 				
 				

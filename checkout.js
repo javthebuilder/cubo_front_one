@@ -384,7 +384,7 @@ function changePaymentSelected(method_id, method_name){
 		console.log("is lalamove true");
 
 		current_shipping_fee =  parseFloat(localStorage.getItem('cubo_checkout_lalamove_shipping_fee'));
-		localStorage.setItem('cubo_checkout_shipping_fee', current_shipping_fee)
+		localStorage.setItem('cubo_checkout_shipping_fee', current_shipping_fee);
 
 	}else{
 		console.log("is lalamove false");
