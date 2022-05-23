@@ -144,7 +144,7 @@
 											<div class="dropdown_content">
 												<div class="profile_info clearfix">
 													<div class="user_thumbnail">
-														<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
+														<img src="http://192.168.1.8:8000/img/account/user.png" alt="thumbnail_not_found">
 														
 														
 													</div>
@@ -158,7 +158,7 @@
 													<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
 													<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
 												</ul>
-												<ul class="settings_options ul_li_block clearfix" id="settings_options_guest" style="visibility: hidden;">												
+												<ul class="settings_options ul_li_block clearfix" id="settings_options_guest" style="display: none;">												
 													<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
 												</ul>
 											</div>
@@ -206,7 +206,7 @@
 										<div class="dropdown_content">
 											<div class="profile_info clearfix">
 												<div class="user_thumbnail">
-													<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
+													<img src="http://192.168.1.8:8000/img/account/user.png" alt="thumbnail_not_found">
 													
 													
 												</div>
@@ -220,7 +220,7 @@
 												<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
 												<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
 											</ul>
-											<ul class="settings_options ul_li_block clearfix" id="settings_options_guest">												
+											<ul class="settings_options ul_li_block clearfix" id="settings_options_guest" style="visibility: hidden;">												
 												<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
 											</ul>
 										</div>
@@ -541,12 +541,28 @@
 		<script src="assets/js/custom.js"></script>
 		
 
-		<script src="main.js"></script>
+		<script src="main.js" defer></script>
 		
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 		<script defer>
-			
+
+			function isNumberKey(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 48 || charCode > 57))
+				return false;
+
+				return true;
+			}
+			function isNumberKeyWithSlash(evt)
+			{
+				var charCode = (evt.which) ? evt.which : event.keyCode
+				if (charCode > 31 && (charCode < 47 || charCode > 57))
+				return false;
+
+				return true;
+			}
 			var email = localStorage.getItem('cubo_login_email');
 			var currentToken = localStorage.getItem('cubo_app_token');
 			var login_id = localStorage.getItem('cubo_login_id');
@@ -558,7 +574,7 @@
 
 			$.ajax({
 				type: 'POST',
-				url: 'http://127.0.0.1:8000/api/get-my-orders/'+login_id,
+				url: 'http://192.168.1.8:8000/api/get-my-orders/'+login_id,
 				contentType: 'application/json',
 				headers: {			   
 					'Content-Type': 'application/json',
@@ -624,23 +640,15 @@
 
 						var pay_now_button = ``;
 						if(onJson[c].order_status == "Processing Order" && onJson[c].payment_method == "3"){
-							pay_now_button = `<button type="button" class="custom_btn bg_default_black" data-dismiss="modal" onClick="javascript:pay_cc_modal('pay_cc_modal_`+onJson[c].order_number+`');">Pay Now</button>`;
+							pay_now_button = `<button type="button" class="custom_btn bg_default_black" data-dismiss="modal" onClick="javascript:pay_cc_modal('pay_cc_modal_`+onJson[c].order_number+`', '`+onJson[c].order_number+`');">Pay Now</button>`;
 
 							pay_cc_modal += `
 								<div class="quickview_modal modal fade show"  id="pay_cc_modal_`+onJson[c].order_number+`" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
-									<div class="modal-dialog modal-dialog-centered" role="document">
-										<div class="modal-content clearfix" style = ".modal{
-											display: block !important; /* I added this to see the modal, you don't need this */
-										}
-
-										/* Important part */
-										.modal-dialog{
-											overflow-y: initial !important
-										}
-										.modal-body{
-											height: 80vh;
-											overflow-y: auto;
-										}">
+									<div class="modal-dialog modal-dialog-centered" role="document" style=" overflow-y: initial !important">
+										<div class="modal-content clearfix" style = "  max-height: calc(100vh - 200px); overflow-y: auto;">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
 											<div class="container">
 											<form action="#">
 												<br>
@@ -651,43 +659,59 @@
 														<div class="col-lg-4">
 															<div class="form_item">
 																<span class="input_title">Full Name<sup>*</sup></span>
-																<input type="text" name="pay_fullname" id="pay_fullname" onchange="saveLocalCheckoutInfo('cubo_pay_fullname', 'pay_fullname')">
+																<input type="text" name="pay_fullname" id="pay_fullname_`+onJson[c].order_number+`" onchange="saveLocalPayInfo('pay_fullname', 'pay_fullname_`+onJson[c].order_number+`')">
 															</div>
 														</div>
 
 														<div class="col-lg-4">
 															<div class="form_item">
 																<span class="input_title">Phone<sup>*</sup></span>
-																<input type="tel" name="phone" id="phone" onchange="saveLocalCheckoutInfo('cubo_checkout_phone', 'phone')">
+																<input type="tel" name="pay_phone" id="pay_phone_`+onJson[c].order_number+`" onchange="saveLocalPayInfo('pay_phone', 'pay_phone_`+onJson[c].order_number+`')">
 															</div>
 														</div>
 									
 														<div class="col-lg-4">
 															<div class="form_item">
 																<span class="input_title">Email Address<sup>*</sup></span>
-																<input type="email" name="email" id="email"  onchange="saveLocalCheckoutInfo('cubo_checkout_email', 'email')">
+																<input type="email" name="pay_email" id="pay_email_`+onJson[c].order_number+`"  onchange="saveLocalPayInfo('pay_email', 'pay_email_`+onJson[c].order_number+`')">
 															</div>        
 														</div>
 									
 														
 													</div>
+													<div class="row">
+														<div class="col-lg-12">
+															<div class="form_item">
+																<span class="input_title">Address Line 1<sup>*</sup></span>
+																<input type="text" name="pay_address" id="pay_address_`+onJson[c].order_number+`" onchange="saveLocalPayInfo('pay_address', 'pay_address_`+onJson[c].order_number+`')">
+															</div>
+														</div>
+														
+													</div>
 
 													<div class="row">
-														<div class="col-lg-4">
+														<div class="col-lg-3">
 															<div class="form_item">
 																<span class="input_title">Town/City<sup>*</sup></span>
-																<input type="text" name="pay_city" id="pay_city" onchange="saveLocalCheckoutInfo('cubo_checkout_city', 'checkout_city')">
+																<input type="text" name="pay_city" id="pay_city_`+onJson[c].order_number+`" onchange="saveLocalPayInfo('pay_city', 'pay_city_`+onJson[c].order_number+`')">
+															</div>
+														</div>
+
+														<div class="col-lg-3">
+															<div class="form_item">
+																<span class="input_title">State / Province <sup>*</sup></span>
+																<input type="text" name="pay_state" id="pay_state_`+onJson[c].order_number+`" onchange="saveLocalPayInfo('pay_state', 'pay_state_`+onJson[c].order_number+`')">
 															</div>
 														</div>
 									
-														<div class="col-lg-4">
+														<div class="col-lg-3">
 															<div class="form_item">
 																<span class="input_title">Postcode / Zip<sup>*</sup></span>
-																<input type="text" name="pay_postal_code" id="pay_postal_code" onchange="saveLocalCheckoutInfo('cubo_checkout_postal_code', 'postal_code')">
+																<input type="text" name="pay_postal_code" id="pay_postal_code_`+onJson[c].order_number+`" onchange="saveLocalPayInfo('pay_postal_code', 'pay_postal_code_`+onJson[c].order_number+`')">
 															</div>
 														</div>
 
-														<div class="col-lg-4">
+														<div class="col-lg-3">
 															<div class="option_select">
 																<span class="input_title">Country<sup>*</sup></span>
 																<select name="country" style="display: none;">
@@ -704,21 +728,21 @@
 
 													<div class="form_item">
 														<span class="input_title">Card Number<sup>*</sup></span>
-														<input type="text" name="card_number" id="card_number" onkeyup="this.value=this.value.replace(/[^\d]/,'')">
+														<input type="text" name="card_number" id= "pay_card_number_`+onJson[c].order_number+`" onkeypress="return isNumberKey(event)"  onchange="saveLocalPayInfo('pay_card_number', 'pay_card_number_`+onJson[c].order_number+`')" maxlength="16">
 													</div>
 
 													<div class="row">
 														<div class="col-lg-6">
 															<div class="form_item">
 																<span class="input_title">Card Expires on <sup>MM/YY</sup></span>
-																<input type="text" name="card_number" id="card_number" >
+																<input type="text" name="pay_card_expires" id="pay_card_expires_`+onJson[c].order_number+`"  onkeypress="return isNumberKeyWithSlash(event)" onchange="saveLocalPayInfo('pay_card_expires', 'pay_card_expires_`+onJson[c].order_number+`')">
 															</div>
 														</div>
 									
 														<div class="col-lg-6">
 															<div class="form_item">
 																<span class="input_title">CVC <sup>Number located back of your card</sup></span>
-																<input type="text" name="card_number" id="card_number" >
+																<input type="text" name="pay_cvv_number" id="pay_cvv_number_`+onJson[c].order_number+`"  onkeypress="return isNumberKey(event)"  onchange="saveLocalPayInfo('pay_cvv_number', 'pay_cvv_number_`+onJson[c].order_number+`')">
 															</div>
 														</div>														
 													</div>									
@@ -730,19 +754,15 @@
 													<div class ="row">
 														<div class="col-lg-12">
 															<div class="form_item">
-																<button type="button" class="custom_btn bg_default_black" onclick="javascript:void(0);">Send Payment Now</button>
+																<button type="button" class="custom_btn bg_default_black" onclick="javascript:sending_payment('`+onJson[c].order_number+`');">Send Payment Now &nbsp;
+																	<div class="spinner-border" role="status" id = "sending_loader_`+onJson[c].order_number+`" style="display:none;">
+																		<span class="sr-only">Loading...</span>
+																	</div>
+																	</button>
 															</div>
 														</div>														
 													</div>
 
-													
-													
-									
-													
-									
-													       							
-													
-									
 												</div>
 											</form>
 											</div>
@@ -841,10 +861,228 @@
 				}
 			})
 			;
+			function sending_payment(order_number){
+				console.log('sending payment' + order_number);
 
-			function pay_cc_modal(pay_modal){
+				
+				
+
+				var jvalue_input = $('#pay_city').val();
+					
+					console.log( " j-> " + jvalue_input );
+				/*
+				"cc_pay_cardnumber":cardNumber,
+				"cc_pay_month_year":month + " " + year,
+				"cc_pay_cvv":cvv,
+				"cc_pay_name":cardHoldername,
+				"transaction_code":spOrdernumber,
+				"checkout_phone":spPhone-,
+				"checkout_email":spEmail,
+				"checkout_address1":spDeliveryaddress,
+				"checkout_city":spDeliverycity,
+				"checkout_zip":spdDeliveryzip,
+				"checkout_state":spDeliverystate,
+				"checkout_country":spDeliverycountry,
+				*/
+				var error_message_payment = "";
+
+				var cc_pay_cardnumber = localStorage.getItem('pay_card_number');
+				if(cc_pay_cardnumber.trim() == ""){
+					error_message_payment += "Card Number should not be blank.\n";
+					$('#pay_card_number_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_card_number_' + order_number).attr("placeholder", "Card Number should not be blank");
+				}
+				var cc_pay_month_year = localStorage.getItem('pay_card_expires');
+				if(cc_pay_month_year.trim() == ""){
+					error_message_payment += "Expiry Date should not be blank.\n";
+					$('#pay_card_expires_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_card_expires_' + order_number).attr("placeholder", "Expiry Date should not be blank");
+				}
+
+				var cc_pay_cvv = localStorage.getItem('pay_cvv_number');
+				if(cc_pay_cvv.trim() == ""){
+					error_message_payment += "CVC Number should not be blank.\n";
+					$('#pay_cvv_number_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_cvv_number_' + order_number).attr("placeholder", "CVC should not be blank");
+				}
+
+				var n_cvv = cc_pay_cvv.length; 
+				if(n_cvv < 3){
+
+					error_message_payment += "CVC Number should be lesser than 3 numbers.\n";
+					$('#pay_cvv_number_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_cvv_number_' + order_number).attr("placeholder", "CVC Number should be lesser than 3 numbers.");
+
+				}
+
+				var cc_pay_name = localStorage.getItem('pay_fullname');
+				if(cc_pay_name.trim() == ""){
+					error_message_payment += "Full Name should not be blank.\n";
+					$('#pay_name_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_name_' + order_number).attr("placeholder", "Full Name should not be blank.");
+				}
+
+				var transaction_code = localStorage.getItem('pay_current_transaction_code');
+				if(transaction_code.trim() == ""){
+					error_message_payment += "Select another transaction.\n";
+				}
+
+				var checkout_phone = localStorage.getItem('pay_phone');
+				if(checkout_phone.trim() == ""){
+					error_message_payment += "Phone Number should not be blank.\n";
+					$('#pay_phone_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_phone_' + order_number).attr("placeholder", "Phone Number should not be blank.");
+				}
+
+				var checkout_email = localStorage.getItem('pay_email');
+				if(checkout_email.trim() == ""){
+					error_message_payment += "Email should not be blank.\n";
+					$('#pay_email_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_email_' + order_number).attr("placeholder", "Email should not be blank.");
+				}
+
+				var checkout_address1 = localStorage.getItem('pay_address');
+				if(checkout_address1.trim() == ""){
+					error_message_payment += "Address1 should not be blank.\n";
+					$('#pay_address_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_address_' + order_number).attr("placeholder", "Address Line 1 should not be blank.");
+				}
+
+				var checkout_city = localStorage.getItem('pay_city');
+				if(checkout_city.trim() == ""){
+					error_message_payment += "City should not be blank.\n";
+					$('#pay_city_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_city_' + order_number).attr("placeholder", "City should not be blank.");
+				}
+
+				var checkout_zip = localStorage.getItem('pay_postal_code');
+				if(checkout_zip.trim() == ""){
+					error_message_payment += "Postalcode/Zip should not be blank.\n";
+					$('#pay_postal_code_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_postal_code_' + order_number).attr("placeholder", "Zip should not be blank.");
+				}
+
+				var checkout_state = localStorage.getItem('pay_state');
+				if(checkout_state.trim() == ""){
+					error_message_payment += "Province / State should not be blank.\n";
+					$('#pay_state_' + order_number).css("border-color", "#FF0000");					
+					$('#pay_state_' + order_number).attr("placeholder", "State / Province should not be blank.");
+				}
+
+
+
+				if(error_message_payment == ""){
+
+					let proceed = confirm("Sending Payment Confirmation:\nAre you sure you want to proceed?", "GRND UP Cofirmation");
+
+					if (proceed) {
+						$('#sending_loader_' + order_number).css("display", "block");
+
+						$.ajax({
+							type: 'POST',
+							url: 'http://192.168.1.8:8000/api/order_pay_cc_api',
+							
+							headers: {							
+								
+								'Authorization': 'Bearer '+ currentToken,			   
+							},
+							data: {
+							
+							'cc_pay_cardnumber': cc_pay_cardnumber,
+							'cc_pay_month_year': cc_pay_month_year,
+							'cc_pay_cvv' : cc_pay_cvv,
+							'cc_pay_name' : cc_pay_name,
+							'transaction_code' : transaction_code,
+							'checkout_phone' : checkout_phone,
+							'checkout_email' : checkout_email,
+							'checkout_address1' : checkout_address1,
+							'checkout_city' : checkout_city,
+							'checkout_zip' : checkout_zip,
+							'checkout_state' :checkout_state, 						
+							'checkout_country' : 'PH'						
+						
+							},
+							success: function(onJson) {		
+
+								console.log(onJson);
+
+								$('#sending_loader_' + order_number).css("display", "none");
+
+								$("#pay_cc_modal_" + order_number).modal('hide');
+
+								alert("Success");
+
+								
+
+							}
+							}).always(function(jqXHR, textStatus) {
+							if (textStatus != "success") {
+
+
+								$("#snackbar").html(``);
+								$("#snackbar").html(`
+								<h4 style="color:red">`+jqXHR+`</h4>
+								`);
+
+
+								// Get the snackbar DIV
+								var x = document.getElementById("snackbar");
+
+								// Add the "show" class to DIV
+								x.className = "show";
+
+								// After 3 seconds, remove the show class from DIV
+								setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+							}
+						});
+					}
+
+				}else{
+					alert(error_message_payment);
+				}
+
+				
+				
+
+			}
+			function pay_cc_modal(pay_modal, current_transaction_code){
 
 				$('#'+pay_modal).modal('show');
+				localStorage.setItem('pay_current_transaction_code',current_transaction_code );
+
+				document.getElementById("pay_fullname_" + current_transaction_code).value = (
+					localStorage.getItem('pay_fullname') != null || localStorage.getItem('pay_fullname') != "")  ? localStorage.getItem('pay_fullname') : "";
+
+				document.getElementById("pay_city_" + current_transaction_code).value = (
+					localStorage.getItem('pay_city') != null || localStorage.getItem('pay_city') != "")  ? localStorage.getItem('pay_city') : "";
+
+				document.getElementById("pay_phone_" + current_transaction_code).value = (
+				localStorage.getItem('pay_phone') != null || localStorage.getItem('pay_phone') != "")  ? localStorage.getItem('pay_phone') : "";
+
+				document.getElementById("pay_state_" + current_transaction_code).value = (
+				localStorage.getItem('pay_state') != null || localStorage.getItem('pay_state') != "")  ? localStorage.getItem('pay_state') : "";
+
+				document.getElementById("pay_postal_code_" + current_transaction_code).value = (
+				localStorage.getItem('pay_postal_code') != null || localStorage.getItem('pay_postal_code') != "")  ? localStorage.getItem('pay_postal_code') : "";
+
+				document.getElementById("pay_address_" + current_transaction_code).value = (
+				localStorage.getItem('pay_address') != null || localStorage.getItem('pay_address') != "")  ? localStorage.getItem('pay_address') : "";
+
+				document.getElementById("pay_email_" + current_transaction_code).value = (
+				localStorage.getItem('pay_email') != null || localStorage.getItem('pay_email') != "")  ? localStorage.getItem('pay_email') : "";
+
+				// c mode
+				document.getElementById("pay_card_number_" + current_transaction_code).value = (
+				localStorage.getItem('pay_card_number') != null || localStorage.getItem('pay_card_number') != "")  ? localStorage.getItem('pay_card_number') : "";
+
+				document.getElementById("pay_cvv_number_" + current_transaction_code).value = (
+				localStorage.getItem('pay_cvv_number') != null || localStorage.getItem('pay_cvv_number') != "")  ? localStorage.getItem('pay_cvv_number') : "";
+
+				document.getElementById("pay_card_expires_" + current_transaction_code).value = (
+				localStorage.getItem('pay_card_expires') != null || localStorage.getItem('pay_card_expires') != "")  ? localStorage.getItem('pay_card_expires') : "";
+
+				
+				
 
 			}
 			function openModal(modalName){
@@ -852,7 +1090,26 @@
 				console.log(modalName);
 				$('#'+modalName).modal('show');
 
+
+
 			}
+
+			function saveLocalPayInfo(data_key, id){
+		
+	
+				var value_input = document.getElementById(""+id).value;
+				//var jvalue_input = $('#'+id).val()
+				
+				localStorage.setItem(data_key, value_input);
+
+				
+
+				
+
+
+			}
+
+			
 		</script>
 
 

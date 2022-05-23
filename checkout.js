@@ -60,7 +60,7 @@ function getCurrentItemsOnCart(){
 	var currentToken = localStorage.getItem('cubo_app_token');
 	$.ajax({
 		type: 'POST',
-		url: 'http://127.0.0.1:8000/api/viewMyCartWeb/'+email,
+		url: 'http://192.168.1.8:8000/api/viewMyCartWeb/'+email,
 		contentType: 'application/json',
 		headers: {			   
 			   'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function loadCurrentCart_Checkout(){
 
 	$.ajax({
 		type: 'POST',
-		url: 'http://127.0.0.1:8000/api/viewMyCartWeb/'+email,
+		url: 'http://192.168.1.8:8000/api/viewMyCartWeb/'+email,
 		contentType: 'application/json',
 		headers: {			   
 			   'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ function loadCurrentCart_Checkout(){
 										<td>
 											<div class="cart_product">
 												<div class="item_image">
-													<img src="http://127.0.0.1:8000/`+onJson[c].image_one+`" alt="`+onJson[c].name+`">
+													<img src="http://192.168.1.8:8000/`+onJson[c].image_one+`" alt="`+onJson[c].name+`">
 												</div>
 												<div class="item_content">
 													<h6 class="item_title" style="overflow-wrap: break-word;">`+onJson[c].name+`</h6>
@@ -233,7 +233,7 @@ function proceedStepTwo(){
 
 	$.ajax({
 		type: 'POST',
-		url: 'http://127.0.0.1:8000/api/viewMyCartWeb/'+email,
+		url: 'http://192.168.1.8:8000/api/viewMyCartWeb/'+email,
 		contentType: 'application/json',
 		headers: {			   
 			   'Content-Type': 'application/json',
@@ -263,7 +263,7 @@ function proceedStepTwo(){
                         <td>
                             <div class="cart_product">
                                 <div class="item_image">
-                                    <img src="http://127.0.0.1:8000/`+onJson[c].image_one+`" alt="`+onJson[c].name+`">
+                                    <img src="http://192.168.1.8:8000/`+onJson[c].image_one+`" alt="`+onJson[c].name+`">
                                 </div>
                                 <div class="item_content">
                                     <h4 class="item_title mb-0">`+onJson[c].name+`</h4>
