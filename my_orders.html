@@ -546,6 +546,7 @@
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 		<script defer>
+									
 
 			function isNumberKey(evt)
 			{
@@ -590,13 +591,17 @@
 					console.log(onJson);
 					for(var c = 0 ; c < onJson.length ; c++){
 
+						
+						
+						
+
 						order_row += `				  
 	  
 						<tr>
 							<td  onclick="javascript:openModal('quickview_modal_order_`+onJson[c].order_number+`');" ><span style="text-decoration: underline;cursor: pointer;">`+
 								onJson[c].order_number+`</span><br>`+onJson[c].order_date+`</td>
 							
-							<td>`+onJson[c].order_status+`</td>
+							<td>`+onJson[c].order_status+`<span id="payment_status_`+onJson[c].order_number+`"></span></td>
 							<td>`+parseFloat(onJson[c].order_total).toFixed(2)+`</td>
 							<td><button class='btn btn-success btn-xs' onclick="javascript:openModal('quickview_modal_order_`+onJson[c].order_number+`');">View</button></td>
 						</tr>			  
@@ -831,11 +836,59 @@
 						$("#order_detail_modal_group").prepend(order_modal_detail);
 						$("#pay_cc_modal_group").prepend(pay_cc_modal);
 
+				
+
 						
 					}
 
 					
 					$("#tbody_orders").prepend(order_row);
+
+					for(var c = 0 ; c < onJson.length ; c++){
+
+						if(onJson[c].paymongo_pi.trim() != ""){
+							console.log(onJson[c].paymongo_pi, onJson[c].order_number);
+							$.ajax({
+							type: 'GET',
+							url: 'https://api.paymongo.com/v1/payment_intents/'+onJson[c].paymongo_pi,
+							
+							headers: {							
+								
+								'Accept' : 'application/json',
+								'Authorization' : 'Basic c2tfbGl2ZV8xNDEyRVU4VEx0Y0J6NEI3ajZ2a1loenM6',
+							},
+							data: {
+							
+							
+						
+							},
+							success: function(pmJson) {		
+
+								console.log(pmJson, pmJson.data['id']);																				
+
+								const options = {method: 'GET', headers: {Accept: 'application/json', Authorization : 'Basic c2tfbGl2ZV8xNDEyRVU4VEx0Y0J6NEI3ajZ2a1loenM6'}};
+								var status_resp = "";
+								fetch('https://api.paymongo.com/v1/payment_intents/'+pmJson.data['id'], options)
+								.then(response => response.json())
+								.then((response) => {
+									status_resp = response.data['attributes'].status;
+									console.log(status_resp);
+
+									//$("#payment_status_"+onJson[c].order_number).text(status_resp);
+									$("#payment_status_"+onJson[c].order_number).html("testing <b>1 2 3</b>");
+
+									//payment_status_"`+onJson[c].order_number+`
+								})
+								.catch(err => console.error(err));
+								
+								//
+
+							}
+							});
+						}
+
+
+					}
 					
 
 			
@@ -1010,7 +1063,22 @@
 
 								$("#pay_cc_modal_" + order_number).modal('hide');
 
-								alert("Success");
+								//alert("Success");
+
+								
+								var popup = window.open(onJson.redirect_url, '', "width=450, height=700");
+
+								var popupTick = setInterval(function() {
+								if (popup.closed) {
+									clearInterval(popupTick);
+									console.log('window closed!');
+									//location.reload();
+
+					
+
+								}
+								}, 500);
+
 
 								
 

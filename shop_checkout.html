@@ -872,8 +872,8 @@
 					+'/'+receiver_full_address
 					+'/'+destination_lat
 					+'/'+destination_lng
-					+'/'+delivery_remarks
-					+'/'+paymentSelected_trimmed
+					+'/'+(delivery_remarks.trim() == "" ? "-" :delivery_remarks.trim() )
+					+'/'+(paymentSelected_trimmed.trim() == "" ? " " :paymentSelected_trimmed.trim() )
 					+'/'+cod_fee,
 					
 					headers: {			   
