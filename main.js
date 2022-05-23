@@ -158,12 +158,12 @@ function loadCurrentCart(){
 
 			var individual_template_cart = ``;
 			var sub_total = 0.00;
+			localStorage.setItem('current_checkout_cart_item_count', onJson.length);
 			for(var c = 0 ; c < onJson.length ; c++){
 
 				sub_total+= (onJson[c].sale_price * onJson[c].quantity);
 	
-				individual_template_cart += `
-				  
+				individual_template_cart += `				  
 	  
 				  <li>
 					  <div class="item_image">
@@ -178,6 +178,14 @@ function loadCurrentCart(){
 				  </li>			  
 			  
 				  `;	  
+			  }
+
+
+			  
+
+			  if(onJson.length > 1 && localStorage.getItem('cubo_current_checkout_step') == 3 ){
+				localStorage.setItem('cubo_current_checkout_step', 1);
+
 			  }
 			  
 			  
@@ -205,7 +213,7 @@ function loadCurrentCart(){
 			 // Get the snackbar DIV
 			var x = document.getElementById("snackbar");
 
-			// Add the "show" class to DIV
+			// Add the "show" class to DIV	
 			x.className = "show";
 
 			// After 3 seconds, remove the show class from DIV
@@ -435,21 +443,28 @@ function loadUser(){
 
 	
 	if(checkCurrentToken() != null){
-		var loginInfo_name = localStorage.getItem('cubo_login_name');
+		var loginInfo_name = '';
+		
+		loginInfo_name += localStorage.getItem('cubo_login_name');
 		
 		
 		document.getElementById("user_name_display").innerHTML = loginInfo_name;
+		document.getElementById("user_name_display_mobile").innerHTML = loginInfo_name;
 		document.getElementById("user_type_name").innerHTML = "Current Login";
+		document.getElementById("user_type_name_mobile").innerHTML = "Current Login";
 		
 
 		document.getElementById("settings_options").style.visibility = 'visible';
 		document.getElementById("settings_options_guest").style.visibility = 'hidden';
+		//settings_options_guest
 
 		
 	}else{
 
 		document.getElementById("user_name_display").innerHTML = "Guest";
+		document.getElementById("user_name_display_mobile").innerHTML = "Guest";
 		document.getElementById("user_type_name").innerHTML = " ";
+		document.getElementById("user_type_name_mobile").innerHTML = " ";
 
 		document.getElementById("settings_options").style.visibility = 'hidden';
 		document.getElementById("settings_options_guest").style.visibility = 'visible';

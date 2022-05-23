@@ -1,0 +1,876 @@
+<!DOCTYPE html la>
+<html lang="en"
+		xmlns="http://www.w3.org/1999/xhtml"
+      	xmlns:fb="http://ogp.me/ns/fb#">
+
+	<head>
+		<meta charset="utf-8">
+		<meta property="og:title" content="GRND UP! - We are changing a life... One grind at a time" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>GRND UP! - We are changing a life... One grind at a time</title>
+		<!-- <meta charset="utf-8">
+		
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		
+
+		<meta property="og:image" content="https://groundtogrind.com/link_logo.jpg" />
+		<meta property="og:image" content="fully_qualified_image_url_here" />
+		<meta property="og:description" content="asian, food, kimchi,fish, tuna, chorizo" />
+		<meta property="og:url"content="https://groundtogrind.com/" />
+		<meta property="og:title" content="GRND Up! - We are changing a life... One grind at a time" /> -->
+		
+
+		<meta property="og:image" content="https://groundtogrind.com/link_logo_wide.jpg" />
+		<meta property="og:description" content="asian, food, kimchi,chorizo" />
+		<meta property="og:url"content="https://groundtogrind.com" />
+		
+		
+		<link rel="shortcut icon" href="assets/images/logo/favourite_icon_01.png">
+
+		<!-- fraimwork - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+		<!-- icon - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/fontawesome.css">
+
+		<!-- animation - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/animate.css">
+
+		<!-- nice select - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/nice-select.css">
+
+		<!-- carousel - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/slick.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/slick-theme.css">
+
+		<!-- popup images & videos - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/magnific-popup.css">
+
+		<!-- jquery ui - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/jquery-ui.css">
+
+		<!-- custom - css include -->
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+		<style>
+			#snackbar {
+			  visibility: hidden;
+			  min-width: 250px;
+			  margin-left: -125px;
+			  background-color: #333;
+			  color: #fff;
+			  text-align: center;
+			  border-radius: 2px;
+			  padding: 16px;
+			  position: fixed;
+			  z-index: 1;
+			  left: 50%;
+			  bottom: 30px;
+			  font-size: 17px;
+			}
+			
+			#snackbar.show {
+			  visibility: visible;
+			  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			}
+			
+			@-webkit-keyframes fadein {
+			  from {bottom: 0; opacity: 0;} 
+			  to {bottom: 30px; opacity: 1;}
+			}
+			
+			@keyframes fadein {
+			  from {bottom: 0; opacity: 0;}
+			  to {bottom: 30px; opacity: 1;}
+			}
+			
+			@-webkit-keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;} 
+			  to {bottom: 0; opacity: 0;}
+			}
+			
+			@keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;}
+			  to {bottom: 0; opacity: 0;}
+			}
+			</style>
+
+	</head>
+
+
+	<body class="home_minimal">
+
+
+		<!-- backtotop - start -->
+		<div id="thetop"></div>
+		<div class="backtotop bg_black">
+			<a href="#" class="scroll">
+				<i class="far fa-arrow-up"></i>
+			</a>
+		</div>
+		<!-- backtotop - end -->
+
+		<!-- preloader - start -->
+		<!-- <div id="preloader"></div> -->
+		<!-- preloader - end -->
+
+
+		<!-- header_section - start
+		================================================== -->
+		<header class="header_section minimal_header sticky_header clearfix">
+			<div class="header_content_wrap d-flex align-items-center clearfix">
+				<div class="container maxw_1430">
+					<div class="row align-items-center justify-content-lg-between">
+						<div class="col-lg-3">
+							<div class="brand_logo">
+								<a class="brand_link" href="index.html">
+									<img src="assets/images/logo/logo_10_1x.png" srcset="assets/images/logo/logo_10_2x.png 2x" alt="logo_not_found">
+								</a>
+
+								<ul class="mh_action_btns ul_li clearfix">
+									<li>
+										<button type="button" class="search_btn" data-toggle="collapse" data-target="#search_body_collapse" aria-expanded="false" aria-controls="search_body_collapse">
+											<i class="fal fa-search"></i>
+										</button>
+									</li>
+									<li>
+										<button type="button" class="user_btn collapsed" data-toggle="collapse" data-target="#use_deropdown" aria-expanded="false" aria-controls="use_deropdown">
+											<i class="fal fa-user"></i>
+										</button>
+										
+										<div id="use_deropdown" class="collapse_dropdown collapse" style="">
+											<div class="dropdown_content">
+												<div class="profile_info clearfix">
+													<div class="user_thumbnail">
+														<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
+														
+														
+													</div>
+													<div class="user_content">
+														<h4 class="user_name" id="user_name_display_mobile"></h4>
+														<span class="user_title" id="user_type_name_mobile"></span>
+													</div>
+												</div>
+												<ul class="settings_options ul_li_block clearfix" id="settings_options" style="visibility: visible;">
+													<li><a href="#!"><i class="fal fa-user-circle"></i> Profile</a></li>
+													<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
+													<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
+												</ul>
+												<ul class="settings_options ul_li_block clearfix" id="settings_options_guest" style="visibility: hidden;">												
+													<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li>
+										<button type="button" class=""  onclick="location.href = '/my_orders.html'">
+											<i class="fal fa-box"></i>											
+										</button>
+									</li>
+									<li>
+										<button type="button" class="cart_btn">
+											<i class="fal fa-shopping-cart"></i>
+											<span class="btn_badge" id="item_count_mobile">0</span>
+										</button>
+									</li>
+									<li><button type="button" class="mobile_menu_btn"><i class="far fa-bars"></i></button></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<nav class="main_menu clearfix">
+								<ul class="ul_li_center clearfix">
+									<li><a href="#!">Home</a></li>									
+									<li><a href="#!">Shop</a></li>									
+									<li><a href="#!">About us</a></li>
+									<li><a href="#!">Contact us</a></li>
+								</ul>
+							</nav>
+						</div>
+
+						<div class="col-lg-3">
+							<ul class="action_btns_group ul_li_right clearfix">
+								<li>
+									<button type="button" class="search_btn" data-toggle="collapse" data-target="#search_body_collapse" aria-expanded="false" aria-controls="search_body_collapse">
+										<i class="fal fa-search"></i>
+									</button>
+								</li>
+								<li>
+									<button type="button" class="user_btn" data-toggle="collapse" data-target="#use_deropdown" aria-expanded="false" aria-controls="use_deropdown">
+										<i class="fal fa-user"></i>
+									</button>
+									<div id="use_deropdown" class="collapse_dropdown collapse">
+										<div class="dropdown_content">
+											<div class="profile_info clearfix">
+												<div class="user_thumbnail">
+													<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
+													
+													
+												</div>
+												<div class="user_content">
+													<h4 class="user_name" id="user_name_display">Jone Doe</h4>
+													<span class="user_title" id="user_type_name"></span>
+												</div>
+											</div>
+											<ul class="settings_options ul_li_block clearfix" id="settings_options">
+												<li><a href="#!"><i class="fal fa-user-circle"></i> Profile</a></li>
+												<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
+												<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
+											</ul>
+											<ul class="settings_options ul_li_block clearfix" id="settings_options_guest">												
+												<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
+											</ul>
+										</div>
+									</div>
+								</li>
+								<li>
+									<button type="button" class=""  onclick="location.href = '/my_orders.html'">
+										<i class="fal fa-box"></i>											
+									</button>
+								</li>
+								<li>
+									<button type="button" class="cart_btn">
+										<i class="fal fa-shopping-cart"></i>
+										<span class="btn_badge" id="item_count_web">0</span>
+									</button>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="search_body_collapse" class="search_body_collapse collapse">
+				<div class="search_body">
+					<div class="container-fluid prl_90">
+						<form action="#">
+							<div class="form_item mb-0">
+								<input type="search" name="search" placeholder="Type here...">
+								<button type="submit"><i class="fal fa-search"></i></button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- header_section - end
+		================================================== -->
+
+
+		<!-- main body - start
+		================================================== -->
+		<main>
+
+
+			<!-- sidebar mobile menu & sidebar cart - start
+			================================================== -->
+			<div class="sidebar-menu-wrapper">
+				<div class="cart_sidebar">
+					<button type="button" class="close_btn"><i class="fal fa-times"></i></button>
+
+					<ul class="cart_items_list ul_li_block mb_30 clearfix" id="current_cart_items">
+						
+						<!-- <li>
+							<div class="item_image">
+								<img src="https://jthemes.net/themes/html/neoncart/assets/images/cart/img_01.jpg" alt="image_not_found">
+							</div>
+							<div class="item_content">
+								<h4 class="item_title">Yellow Blouse</h4>
+								<span class="item_price">$30.00</span>
+							</div>
+							<button type="button" class="remove_btn"><i class="fal fa-trash-alt"></i></button>
+						</li> -->
+						
+
+					</ul>
+
+				
+
+					<ul class="total_price ul_li_block mb_30 clearfix">
+						<li>
+							<span>Subtotal:</span>
+							<span id="checkout_subtotal">0.00</span>
+						</li>
+						
+						
+						<li>
+							<span>Total:</span>
+							<span id="checkout_total">0.00</span>
+						</li>
+					</ul>
+
+					<ul class="btns_group ul_li_block clearfix">
+						<li><a href="/shop_checkout.html">View Cart</a></li>
+						<li><a href="/shop_checkout.html">Checkout</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar_mobile_menu">
+					<button type="button" class="close_btn"><i class="fal fa-times"></i></button>
+
+					<div class="msb_widget brand_logo text-center">
+						<a href="index.html">
+							<img src="assets/images/logo/logo_25_1x.png" srcset="assets/images/logo/logo_25_2x.png 2x" alt="logo_not_found">
+						</a>
+					</div>
+
+					<div class="msb_widget mobile_menu_list clearfix">
+						<!-- <h3 class="title_text mb_15 text-uppercase"><i class="far fa-bars mr-2"></i> Menu List</h3> -->
+						<ul class="ul_li_block clearfix">
+							<li><a href="#!">Home</a></li>    
+							<li><a href="#!">Shop</a></li>    
+							<li><a href="#!">About Us</a></li>    
+							<li><a href="#!">Contact</a></li>    
+						</ul>
+					</div>
+
+				
+				</div>
+
+				<div class="overlay"></div>
+			</div>
+			<!-- sidebar mobile menu & sidebar cart - end
+			================================================== -->
+
+
+			<!-- breadcrumb_section - start
+			================================================== -->
+			<section class="breadcrumb_section text-white text-center text-uppercase d-flex align-items-end clearfix" data-background="assets/images/breadcrumb/bg_11.jpg">
+				<div class="overlay" data-bg-color="#1d1d1d"></div>
+				<div class="container">
+					<h1 class="page_title text-white">My Orders</h1>
+					<ul class="breadcrumb_nav ul_li_center clearfix" style="display: none;">
+						<li><a href="/">Active</a></li>
+						<li><a href="/">Canceled</a></li>
+						<li><a href="/">Completed</a></li>
+					</ul>
+				</div>
+			</section>
+			<!-- breadcrumb_section - end
+			================================================== -->
+
+
+			<!-- cart_section - start
+			================================================== -->
+			<section class="cart_section sec_ptb_140 clearfix">
+				<div class="container">
+
+
+
+					<div class="cart_table mb_50" id="shopping_cart_table">
+						<table class="table">
+							<thead class="text-uppercase bg-white border-bottom">
+								<tr>
+									<th>Order #</th>									
+									<th>Status</th>
+									<th>Sub Total</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody id="tbody_orders">
+								
+
+							</tbody>
+						</table>
+					</div>
+				
+
+
+
+
+				</div>
+			</section>
+			<!-- cart_section - end
+			================================================== quickview_modal_sending_order_done-->
+
+			<div class="quickview_modal modal fade show" id="quickview_modal_sending_order_done" tabindex="-1" role="dialog" style="display: none;" aria-modal="true" style="border-radius:38px;">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content clearfix" style="text-align: center;">					
+						
+						<img src="/assets/images/92578-check-okey-done.gif" alt="image_not_found" width="150px" height="150px">												
+						<h6>Order Sent</h6>			
+						<h2 class="item_title mb_15" id="order_transction_number"></h2>
+						<h2 class="item_title mb_15" id="order_transction_link"></h2>
+						<button type="button" class="custom_btn bg_default_black" onclick="javascript:void(0);">View All Orders</button>
+						<br>
+						<br>
+					</div>
+				</div>
+			</div>
+
+			<div class="quickview_modal modal fade show" id="quickview_modal_sending_order_done" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content clearfix" style="text-align: center;">	
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>				
+						<br><br>
+						
+						<h6>Order Sent</h6>			
+						<h2 class="item_title mb_15" id="order_transction_number"></h2>
+						<h2 class="item_title mb_15" id="order_transction_link"></h2>
+						<table class="table">
+							<th>Item</th>							
+							<th>Total</th>
+						</table>
+						<br>
+						<button type="button" class="custom_btn bg_default_black" onclick="javascript:void(0);">View All Orders</button>
+						<br>
+						<br>
+					</div>
+				</div>
+			</div>
+
+			<div class="quickview_modal modal fade show" id="quickview_modal_sending_checkout" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content clearfix" style="text-align: center;">					
+						
+						<img src="/assets/images/97952-loading-animation-blue.gif" alt="image_not_found" width="150px" height="150px">												
+						<h6>Sending Order</h6>																		
+					</div>
+				</div>
+			</div>
+			
+
+		</main>
+		<!-- main body - end
+		================================================== -->
+
+
+
+		<!-- footer_section - start
+		================================================== -->
+		<footer class="footer_section minimal_footer clearfix">
+			<div class="footer_widget_area sec_ptb_100 clearfix">
+				<div class="container">
+					<div class="row justify-content-lg-between">
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="footer_widget footer_about">
+								<div class="brand_logo mb_30">
+									<a href="index.html">
+										<img src="assets/images/logo/logo_09_1x.png" srcset="assets/images/logo/logo_09_2x.png 2x" alt="logo_not_found">
+									</a>
+								</div>
+								
+								<p class="mb_30">
+
+									Sellers of Homemade Frozen Meat Products and Bottled Fermented and Pickled Goods.
+								</p>
+
+								<div class="footer_widget footer_contact_info clearfix">
+									<ul class="ul_li_block">
+										<li><span>Phone:</span> +63 917 315 3590</li>
+										<li><span>Email:</span> info@cubo.com</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+					
+					</div>
+				</div>
+			</div>
+
+			<div class="footer_bottom clearfix">
+				<div class="container">
+					<div class="row align-items-center justify-content-lg-between">
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<p class="copyright_text mb-0">
+								@2021 Designed By <a href="https://adventuresmarketingconcepts.com/" target="_blank" class="author_link text-white">Adventures Marketing Concepts</a>.
+							</p>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<ul class="circle_social_links ul_li_right clearfix">
+								<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
+								<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
+								<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
+								<li><a href="#!"><i class="fab fa-whatsapp"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- footer_section - end
+		================================================== -->
+
+		<div id="snackbar"></div>
+		
+		<!-- fraimwork - jquery include -->
+		<script src="assets/js/jquery-3.5.1.min.js"></script>
+		<script src="assets/js/popper.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+
+		<!-- mobile menu - jquery include -->
+        <script src="assets/js/mCustomScrollbar.js"></script>
+
+		<!-- google map - jquery include -->
+		<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNwl9EECAVru2m0R3T9SvkIpF-uVlw_v8&ver=2.1.6"></script> -->
+        <!-- <script src="assets/js/gmaps.min.js"></script>  -->
+
+		<!-- animation - jquery include -->
+        <script src="assets/js/parallaxie.js"></script>
+        <script src="assets/js/wow.min.js"></script>
+
+		<!-- nice select - jquery include -->
+        <script src="assets/js/nice-select.min.js"></script>
+
+		<!-- carousel - jquery include -->
+        <script src="assets/js/slick.min.js"></script>
+
+		<!-- countdown timer - jquery include -->
+        <script src="assets/js/countdown.js"></script>
+
+		<!-- popup images & videos - jquery include -->
+        <script src="assets/js/magnific-popup.min.js"></script>
+
+		<!-- filtering & masonry layout - jquery include -->
+        <script src="assets/js/isotope.pkgd.min.js"></script>
+        <script src="assets/js/masonry.pkgd.min.js"></script>
+        <script src="assets/js/imagesloaded.pkgd.min.js"></script>
+
+		<!-- jquery ui - jquery include -->
+        <script src="assets/js/jquery-ui.js"></script>
+
+		<!-- custom - jquery include -->
+		<script src="assets/js/custom.js"></script>
+		
+
+		<script src="main.js"></script>
+		
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+		<script defer>
+			
+			var email = localStorage.getItem('cubo_login_email');
+			var currentToken = localStorage.getItem('cubo_app_token');
+			var login_id = localStorage.getItem('cubo_login_id');
+
+			var individual_order_detail = ``;
+			var order_row = ``;
+			
+			
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://127.0.0.1:8000/api/get-my-orders/'+login_id,
+				contentType: 'application/json',
+				headers: {			   
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+					'Authorization': 'Bearer '+ currentToken,			   
+				},
+				data: {
+					
+					
+				},
+				success: function(onJson) {		
+
+					console.log(onJson);
+					for(var c = 0 ; c < onJson.length ; c++){
+
+						order_row += `				  
+	  
+						<tr>
+							<td  onclick="javascript:openModal('quickview_modal_order_`+onJson[c].order_number+`');" ><span style="text-decoration: underline;cursor: pointer;">`+
+								onJson[c].order_number+`</span><br>`+onJson[c].order_date+`</td>
+							
+							<td>`+onJson[c].order_status+`</td>
+							<td>`+parseFloat(onJson[c].order_total).toFixed(2)+`</td>
+							<td><button class='btn btn-success btn-xs' onclick="javascript:openModal('quickview_modal_order_`+onJson[c].order_number+`');">View</button></td>
+						</tr>			  
+
+						`;
+
+						var tb_inside_body = `<tbody>`;
+
+						for(var d = 0; d < onJson[c].item_list.length ; d ++){
+							var item_amount =parseFloat(onJson[c].item_list[d].price) * parseFloat(onJson[c].item_list[d].quantity); 
+							tb_inside_body+= `
+								<tr>
+									<td>` + onJson[c].item_list[d].name +` |<br> <small>` + parseFloat(onJson[c].item_list[d].price).toFixed(2) +` @ ` + parseFloat(onJson[c].item_list[d].quantity) +`</small></td>
+									<td>` +  item_amount.toFixed(2) +`</td>
+								</tr>
+							`;
+
+
+						}
+
+						var transaction_fee = 0;
+						//console.log(" > " + onJson[c].payment_method);
+						if(onJson[c].payment_method == "1"){
+							transaction_fee = 0.00;
+						}else{
+							transaction_fee = parseFloat(onJson[c].transactionfee);
+
+						}
+						shipping_fee = 0;
+						if(onJson[c].shipping_fee == ""){
+							console.log("shipping fee blank");
+							shipping_fee = 0;
+						}else{
+
+							shipping_fee = parseFloat(onJson[c].shipping_fee);
+						}
+
+						order_total = transaction_fee + shipping_fee + parseFloat(onJson[c].subtotal);
+						//console.log(parseFloat(onJson[c].transactionfee), shipping_fee, parseFloat(onJson[c].subtotal));
+						var pay_cc_modal = ``;
+
+						var pay_now_button = ``;
+						if(onJson[c].order_status == "Processing Order" && onJson[c].payment_method == "3"){
+							pay_now_button = `<button type="button" class="custom_btn bg_default_black" data-dismiss="modal" onClick="javascript:pay_cc_modal('pay_cc_modal_`+onJson[c].order_number+`');">Pay Now</button>`;
+
+							pay_cc_modal += `
+								<div class="quickview_modal modal fade show"  id="pay_cc_modal_`+onJson[c].order_number+`" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content clearfix" style = ".modal{
+											display: block !important; /* I added this to see the modal, you don't need this */
+										}
+
+										/* Important part */
+										.modal-dialog{
+											overflow-y: initial !important
+										}
+										.modal-body{
+											height: 80vh;
+											overflow-y: auto;
+										}">
+											<div class="container">
+											<form action="#">
+												<br>
+												<center><h3> Sending Payment </h3></center>
+												<div class="form_wrap">
+									
+													<div class="row">
+														<div class="col-lg-4">
+															<div class="form_item">
+																<span class="input_title">Full Name<sup>*</sup></span>
+																<input type="text" name="pay_fullname" id="pay_fullname" onchange="saveLocalCheckoutInfo('cubo_pay_fullname', 'pay_fullname')">
+															</div>
+														</div>
+
+														<div class="col-lg-4">
+															<div class="form_item">
+																<span class="input_title">Phone<sup>*</sup></span>
+																<input type="tel" name="phone" id="phone" onchange="saveLocalCheckoutInfo('cubo_checkout_phone', 'phone')">
+															</div>
+														</div>
+									
+														<div class="col-lg-4">
+															<div class="form_item">
+																<span class="input_title">Email Address<sup>*</sup></span>
+																<input type="email" name="email" id="email"  onchange="saveLocalCheckoutInfo('cubo_checkout_email', 'email')">
+															</div>        
+														</div>
+									
+														
+													</div>
+
+													<div class="row">
+														<div class="col-lg-4">
+															<div class="form_item">
+																<span class="input_title">Town/City<sup>*</sup></span>
+																<input type="text" name="pay_city" id="pay_city" onchange="saveLocalCheckoutInfo('cubo_checkout_city', 'checkout_city')">
+															</div>
+														</div>
+									
+														<div class="col-lg-4">
+															<div class="form_item">
+																<span class="input_title">Postcode / Zip<sup>*</sup></span>
+																<input type="text" name="pay_postal_code" id="pay_postal_code" onchange="saveLocalCheckoutInfo('cubo_checkout_postal_code', 'postal_code')">
+															</div>
+														</div>
+
+														<div class="col-lg-4">
+															<div class="option_select">
+																<span class="input_title">Country<sup>*</sup></span>
+																<select name="country" style="display: none;">
+																	<option value="PH" selected="">Philippines</option>
+																	
+																</select><div class="nice-select" tabindex="0">
+																<span class="current">Philippines</span>
+																<ul class="list">
+																	<li data-value="PH" class="option selected">Philippines</li>                        
+																</ul></div>
+															</div>
+														</div>
+													</div>
+
+													<div class="form_item">
+														<span class="input_title">Card Number<sup>*</sup></span>
+														<input type="text" name="card_number" id="card_number" onkeyup="this.value=this.value.replace(/[^\d]/,'')">
+													</div>
+
+													<div class="row">
+														<div class="col-lg-6">
+															<div class="form_item">
+																<span class="input_title">Card Expires on <sup>MM/YY</sup></span>
+																<input type="text" name="card_number" id="card_number" >
+															</div>
+														</div>
+									
+														<div class="col-lg-6">
+															<div class="form_item">
+																<span class="input_title">CVC <sup>Number located back of your card</sup></span>
+																<input type="text" name="card_number" id="card_number" >
+															</div>
+														</div>														
+													</div>									
+													<div class="row">
+														
+													</div>
+
+
+													<div class ="row">
+														<div class="col-lg-12">
+															<div class="form_item">
+																<button type="button" class="custom_btn bg_default_black" onclick="javascript:void(0);">Send Payment Now</button>
+															</div>
+														</div>														
+													</div>
+
+													
+													
+									
+													
+									
+													       							
+													
+									
+												</div>
+											</form>
+											</div>
+										</div>
+									</div>
+								</div>
+								`;
+
+						}
+						var lalamove_button = ``;
+						if(onJson[c].lalamove_link != ""){
+							pay_now_button = `<button type="button" class="custom_btn bg_default_black" onclick="javascript:void(0);">Track My Delivery</button>`;
+
+						}
+
+						var order_modal_detail = `
+						<div class="quickview_modal modal fade show" id="quickview_modal_order_`+onJson[c].order_number+`" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content clearfix" style="text-align: center;">	
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">×</span>
+									</button>				
+									<br><br>
+									<h5 >`+onJson[c].order_number+`</h5>
+									<h6>`+onJson[c].order_status+`</h6>			
+									<h6>`+onJson[c].order_date+`</h6>
+									<h2 class="item_title mb_15" id="order_transction_number"></h2>
+									<h2 class="item_title mb_15" id="order_transction_link"></h2>
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Item</th>							
+												<th>Total</th>
+											</tr>										
+										</thead>
+										`+tb_inside_body+`
+										<tr>
+											<td style="font-weight:bold;">Subtotal</td>
+											<td>`+parseFloat("0" +onJson[c].subtotal).toFixed(2)+`</td>
+										</tr>
+										<tr>
+											<td style="font-weight:bold;">Transaction Fee</td>
+											<td>` + transaction_fee.toFixed(2) + `</td>
+										</tr>
+										<tr>
+											<td style="font-weight:bold;">Shipping Fee</td>
+											<td>`+parseFloat("0" + onJson[c].shippingfee).toFixed(2)+`</td>
+										</tr>
+										<tr>
+											<td style="font-weight:bold;">Order Total</td>
+											<td>` + order_total.toFixed(2) + `</td>
+										</tr>
+									</table>
+									
+									<br>
+									`+ lalamove_button + `
+									`+pay_now_button+`
+									
+									<br>
+									<br>
+								</div>
+							</div>
+						</div>
+						`;
+						//console.log(order_modal_detail);
+						$("#order_detail_modal_group").prepend(order_modal_detail);
+						$("#pay_cc_modal_group").prepend(pay_cc_modal);
+
+						
+					}
+
+					
+					$("#tbody_orders").prepend(order_row);
+					
+
+			
+				}
+				}).always(function(jqXHR, textStatus) {
+				if (textStatus != "success") {
+
+
+					$("#snackbar").html(``);
+					$("#snackbar").html(`
+					<h4 style="color:red">Not currently login</h4>
+					`);
+
+
+					// Get the snackbar DIV
+					var x = document.getElementById("snackbar");
+
+					// Add the "show" class to DIV
+					x.className = "show";
+
+					// After 3 seconds, remove the show class from DIV
+					setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+				}
+			})
+			;
+
+			function pay_cc_modal(pay_modal){
+
+				$('#'+pay_modal).modal('show');
+
+			}
+			function openModal(modalName){
+				console.log("modalName");
+				console.log(modalName);
+				$('#'+modalName).modal('show');
+
+			}
+		</script>
+
+
+
+		
+		<div id="order_detail_modal_group">
+
+
+
+		</div>
+		<div id="pay_cc_modal_group">
+
+
+
+		</div>
+		<!-- product quick view - end -->
+		<!-- shop_section - end
+			================================================== -->
+		
+	</body>
+</html>

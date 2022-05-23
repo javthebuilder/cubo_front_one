@@ -136,6 +136,40 @@
 										</button>
 									</li>
 									<li>
+										<button type="button" class="user_btn collapsed" data-toggle="collapse" data-target="#use_deropdown" aria-expanded="false" aria-controls="use_deropdown">
+											<i class="fal fa-user"></i>
+										</button>
+										
+										<div id="use_deropdown" class="collapse_dropdown collapse" style="">
+											<div class="dropdown_content">
+												<div class="profile_info clearfix">
+													<div class="user_thumbnail">
+														<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
+														
+														
+													</div>
+													<div class="user_content">
+														<h4 class="user_name" id="user_name_display_mobile"></h4>
+														<span class="user_title" id="user_type_name_mobile"></span>
+													</div>
+												</div>
+												<ul class="settings_options ul_li_block clearfix" id="settings_options" style="visibility: visible;">
+													<li><a href="#!"><i class="fal fa-user-circle"></i> Profile</a></li>
+													<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
+													<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
+												</ul>
+												<ul class="settings_options ul_li_block clearfix" id="settings_options_guest" style="visibility: hidden;">												
+													<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li>
+										<button type="button" class=""  onclick="location.href = '/my_orders.html'">
+											<i class="fal fa-box"></i>											
+										</button>
+									</li>
+									<li>
 										<button type="button" class="cart_btn">
 											<i class="fal fa-shopping-cart"></i>
 											<span class="btn_badge" id="item_count_mobile">0</span>
@@ -186,11 +220,16 @@
 												<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
 												<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
 											</ul>
-											<ul class="settings_options ul_li_block clearfix" id="settings_options_guest">												
+											<ul class="settings_options ul_li_block clearfix" id="settings_options_guest"  style="visibility: hidden;">												
 												<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
 											</ul>
 										</div>
 									</div>
+								</li>
+								<li>
+									<button type="button" class=""  onclick="location.href = '/my_orders.html'">
+										<i class="fal fa-box"></i>											
+									</button>
 								</li>
 								<li>
 									<button type="button" class="cart_btn">
@@ -198,6 +237,7 @@
 										<span class="btn_badge" id="item_count_web">0</span>
 									</button>
 								</li>
+
 							</ul>
 						</div>
 					</div>

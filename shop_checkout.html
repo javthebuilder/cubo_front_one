@@ -136,6 +136,40 @@
 										</button>
 									</li>
 									<li>
+										<button type="button" class="user_btn collapsed" data-toggle="collapse" data-target="#use_deropdown" aria-expanded="false" aria-controls="use_deropdown">
+											<i class="fal fa-user"></i>
+										</button>
+										
+										<div id="use_deropdown" class="collapse_dropdown collapse" style="">
+											<div class="dropdown_content">
+												<div class="profile_info clearfix">
+													<div class="user_thumbnail">
+														<img src="http://127.0.0.1:8000/img/account/user.png" alt="thumbnail_not_found">
+														
+														
+													</div>
+													<div class="user_content">
+														<h4 class="user_name" id="user_name_display_mobile"></h4>
+														<span class="user_title" id="user_type_name_mobile"></span>
+													</div>
+												</div>
+												<ul class="settings_options ul_li_block clearfix" id="settings_options" style="visibility: visible;">
+													<li><a href="#!"><i class="fal fa-user-circle"></i> Profile</a></li>
+													<li style="display: none;"><a href="#!"><i class="fal fa-user-cog"></i> Settings</a></li>
+													<li onclick="logout_user()"><a href="#!"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
+												</ul>
+												<ul class="settings_options ul_li_block clearfix" id="settings_options_guest" style="visibility: hidden;">												
+													<li><a href="/login.html"><i class="fal fa-sign-out-alt"></i> Login</a></li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li>
+										<button type="button" class=""  onclick="location.href = '/my_orders.html'">
+											<i class="fal fa-box"></i>											
+										</button>
+									</li>
+									<li>
 										<button type="button" class="cart_btn">
 											<i class="fal fa-shopping-cart"></i>
 											<span class="btn_badge" id="item_count_mobile">0</span>
@@ -149,10 +183,10 @@
 						<div class="col-lg-6">
 							<nav class="main_menu clearfix">
 								<ul class="ul_li_center clearfix">
-									<li><a href="/">Home</a></li>									
-									<li><a href="/">Shop</a></li>									
-									<li><a href="/">About us</a></li>
-									<li><a href="/">Contact us</a></li>
+									<li><a href="#!">Home</a></li>									
+									<li><a href="#!">Shop</a></li>									
+									<li><a href="#!">About us</a></li>
+									<li><a href="#!">Contact us</a></li>
 								</ul>
 							</nav>
 						</div>
@@ -193,11 +227,17 @@
 									</div>
 								</li>
 								<li>
+									<button type="button" class="" onclick="location.href = '/my_orders.html'">
+										<i class="fal fa-box"></i>											
+									</button>
+								</li>
+								<li>
 									<button type="button" class="cart_btn">
 										<i class="fal fa-shopping-cart"></i>
 										<span class="btn_badge" id="item_count_web">0</span>
 									</button>
 								</li>
+
 							</ul>
 						</div>
 					</div>
@@ -448,7 +488,7 @@
 									<li><span>Shipping</span> <span><a class="shipping_calculate text-capitalize" href="#!">Calculating Later</a></span></li>
 									<li><span>Total</span> <span id="checkout_page_net_total">0.00</span></li>
 								</ul>
-								<a href="#!" onclick="proceedStepTwo();" class="custom_btn bg_success">Proceed to Checkout</a>
+								<a href="javascript:void(0);" onclick="proceedStepTwo();" class="custom_btn bg_success">Proceed to Checkout</a>
 							</div>
 						</div>
 					</div>
@@ -456,8 +496,33 @@
 				</div>
 			</section>
 			<!-- cart_section - end
-			================================================== -->
+			================================================== quickview_modal_sending_order_done-->
 
+			<div class="quickview_modal modal fade show" id="quickview_modal_sending_order_done" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content clearfix" style="text-align: center;">					
+						
+						<img src="/assets/images/92578-check-okey-done.gif" alt="image_not_found" width="150px" height="150px">												
+						<h6>Order Sent</h6>			
+						<h2 class="item_title mb_15" id="order_transction_number"></h2>
+						<h2 class="item_title mb_15" id="order_transction_link"></h2>
+						<button type="button" class="custom_btn bg_default_black" onclick="window.location='/my_orders.html'">View All Orders</button>
+						<br>
+						<br>
+					</div>
+				</div>
+			</div>
+
+			<div class="quickview_modal modal fade show" id="quickview_modal_sending_checkout" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content clearfix" style="text-align: center;">					
+						
+						<img src="/assets/images/97952-loading-animation-blue.gif" alt="image_not_found" width="150px" height="150px">												
+						<h6>Sending Order</h6>																		
+					</div>
+				</div>
+			</div>
+			
 
 		</main>
 		<!-- main body - end
@@ -478,8 +543,9 @@
 										<img src="assets/images/logo/logo_09_1x.png" srcset="assets/images/logo/logo_09_2x.png 2x" alt="logo_not_found">
 									</a>
 								</div>
-
+								
 								<p class="mb_30">
+
 									Sellers of Homemade Frozen Meat Products and Bottled Fermented and Pickled Goods.
 								</p>
 
@@ -652,6 +718,7 @@
 
 		<!-- custom - jquery include -->
 		<script src="assets/js/custom.js"></script>
+		
 
 		<script src="main.js"></script>
 		<script src="checkout.js" async defer></script>
@@ -1268,6 +1335,8 @@
 			}
 			function save_delivery_info(){
 
+
+
 				console.log("save_delivery_info()");
 				var error_message = checkBlankInputs_ForDialog();
 
@@ -1282,7 +1351,7 @@
 
 					if (proceed) {
 					//proceed
-
+					$('#quickview_modal_sending_checkout').modal('show');
 					delivery_city_text = localStorage.getItem('cubo_checkout_city');
 					delivery_barangay = '';//document.getElementById('checkout_barangay').value;
 
@@ -1312,7 +1381,7 @@
 
 					// TODO : 
 					paymentSelected_saved = localStorage.getItem('cubo_checkout_payment_selected');
-					paymentSelected_trimmed = paymentSelected_saved == "COD (Cash On Delivery)" ? "COD" : " ";
+					paymentSelected_trimmed = paymentSelected_saved;// == "COD (Cash On Delivery)" ? "COD" : " ";
 
 					//paymentSelected_trimmed =  localStorage.getItem('cubo_checkout_payment_selected');
 					delivery_fee =  localStorage.getItem('cubo_checkout_delivery_fee');
@@ -1419,9 +1488,18 @@
 							console.log(onJson);
 							localStorage.setItem('cubo_current_checkout_order_model', onJson);
 							localStorage.setItem('cubo_current_checkout_step', 3);
+							
 
 							console.log('transaction_model');
 							console.log(localStorage.getItem('cubo_current_checkout_order_model'));
+							localStorage.setItem('lastTransactionCode',onJson );
+							localStorage.setItem('last_transaction_code',onJson.id);
+							localStorage.setItem('last_transaction_link',onJson.link);
+
+							$("#order_transction_number").html(onJson.id);
+							$("#order_transction_link").html(onJson.link);
+							$('#quickview_modal_sending_checkout').modal('hide');
+							$('#quickview_modal_sending_order_done').modal('show');
 							
 
 						}
@@ -1456,6 +1534,7 @@
 
 				}else{
 					// not clear to go checkout
+					$('#quickview_modal_sending_checkout').modal('hide');
 					alert(error_message);
 
 				}

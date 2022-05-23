@@ -1,21 +1,88 @@
 
 var current_checkout_step = localStorage.getItem('cubo_current_checkout_step');	
+var current_checkout_item_count = localStorage.getItem('current_checkout_cart_item_count');	
 var individual_template_checkout_cart = ``;
 
+console.log("Checking my checkout step : " + current_checkout_step);
 
 if(current_checkout_step == null || current_checkout_step == 1){
 	
-     
+	$("#cart_total_summary").show();
+	$("#shopping_cart_table").show();       
 	$("#billing_form").hide();  
 	loadCurrentCart_Checkout();
 
 }else if(current_checkout_step == 2){
 
-	$("#billing_form").show();  
-    proceedStepTwo();
+	if(current_checkout_item_count > 0)
+	{
+		$("#cart_total_summary").show();
+		$("#shopping_cart_table").show();  
+		$("#billing_form").show();  
+    	proceedStepTwo();
+
+	}
+	else
+	{
+		$("#cart_total_summary").show();
+		$("#billing_form").hide();  
+		$("#shopping_cart_table").show();  
+		loadCurrentCart_Checkout();
+	}
+}else if(current_checkout_step == 3){
+	
+	$("#shopping_cart_table").hide();  
+	$("#cart_total_summary").hide();  
+
+	if(current_checkout_item_count > 0)
+	{
+		//var cartItems
+		//console.log("else >>> " + await getCurrentItemsOnCart());
+		localStorage.setItem('cubo_current_checkout_step', 1);
+		$("#cart_total_summary").show();
+		$("#shopping_cart_table").show();       
+		$("#billing_form").hide();  
+		loadCurrentCart_Checkout();
+
+	}
+	else
+	{
+		console.log("else >>> " + current_checkout_item_count);
+	}
+	
+	
 }
 
 
+function getCurrentItemsOnCart(){
+
+	var email = localStorage.getItem('cubo_login_email');
+	var currentToken = localStorage.getItem('cubo_app_token');
+	$.ajax({
+		type: 'POST',
+		url: 'http://127.0.0.1:8000/api/viewMyCartWeb/'+email,
+		contentType: 'application/json',
+		headers: {			   
+			   'Content-Type': 'application/json',
+			'Accept': 'application/json',
+			'Authorization': 'Bearer '+ currentToken,			   
+		},
+		data: {
+			'email':email,
+			
+		},
+		success: function(onJson) {
+
+			return  onJson.length;						  
+	
+		}
+		}).always(function(jqXHR, textStatus) {
+		if (textStatus != "success") {
+			return 0;
+		}
+	});
+
+}
 
 function loadCurrentCart_Checkout(){    
     console.log("loadCurrentCart_Checkout");
@@ -356,7 +423,89 @@ function proceedStepTwo(){
     $("#step_2_marker").addClass("active");
 
     $("#shopping_cart_table").html(``);
+	var checkout_current_step = localStorage.getItem('cubo_current_checkout_step');
     
+	if(checkout_current_step == 2){
+
+		console.log('defer start');
+		var fname = localStorage.getItem('cubo_checkout_firstname');
+		if(fname != null){				
+			$('#firstname').val(fname);
+		}
+
+		var lname = localStorage.getItem('cubo_checkout_lastname');
+		if(lname != null){				
+			$('#lastname').val(lname);
+		}
+
+		var company_name = localStorage.getItem('cubo_checkout_company');
+		if(company_name != null){				
+			$('#company').val(company_name);
+		}
+
+		var full_add = localStorage.getItem('cubo_checkout_delivery_location');
+		if(full_add != null){				
+			$('#input_checkout_full_address').val(full_add);
+		}
+
+		var city_add = localStorage.getItem('cubo_checkout_city');
+		if(city_add != null){				
+			$('#checkout_city').val(city_add);
+		}
+
+		var postal_add = localStorage.getItem('cubo_checkout_postal_code');
+		console.log('postal_add:' + postal_add);
+		if(postal_add != null){				
+
+			$('#postal_code').val(postal_add);
+
+		}else if(postal_add+"" == "undefined"){
+
+			$('#postal_code').val(postal_add);
+		}
+		else{
+
+			$('#postal_code').val('6000');
+		}
+
+		var phone_add = localStorage.getItem('cubo_checkout_phone');
+		if(phone_add != null){				
+			$('#phone').val(phone_add);
+		}
+
+		var email_add = localStorage.getItem('cubo_checkout_email');
+		if(email_add != null){
+			var logged_email = localStorage.getItem('cubo_login_email');
+			
+			var value_input = logged_email;
+			localStorage.setItem('cubo_checkout_email', value_input);
+
+			$('#email').val(logged_email);
+		}else{
+			$('#email').val(email_add);
+
+		}
+
+		var notes_add = localStorage.getItem('cubo_delivery_landmark_notes');
+		if(notes_add != null){				
+			$('#delivery_landmark_notes').val(notes_add);
+		}
+
+		var lat_add = localStorage.getItem('cubo_checkout_address_latitude');
+		if(lat_add != null){				
+			$('#checkout_address_latitude').val(lat_add);
+		}	
+
+		var lng_add = localStorage.getItem('cubo_checkout_address_longtitude');
+		if(lng_add != null){				
+			$('#checkout_address_longtitude').val(lng_add);
+		}
+
+
+
+
+
+	}
 
 
 }
