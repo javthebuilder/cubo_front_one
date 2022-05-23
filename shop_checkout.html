@@ -144,7 +144,7 @@
 											<div class="dropdown_content">
 												<div class="profile_info clearfix">
 													<div class="user_thumbnail">
-														<img src="http://192.168.1.8:8000/img/account/user.png" alt="thumbnail_not_found">
+														<img src="https://cubo.market/img/account/user.png" alt="thumbnail_not_found">
 														
 														
 													</div>
@@ -206,7 +206,7 @@
 										<div class="dropdown_content">
 											<div class="profile_info clearfix">
 												<div class="user_thumbnail">
-													<img src="http://192.168.1.8:8000/img/account/user.png" alt="thumbnail_not_found">
+													<img src="https://cubo.market/img/account/user.png" alt="thumbnail_not_found">
 													
 													
 												</div>
@@ -844,7 +844,7 @@
 				console.log("getLalamoveQuotationAmount:" +paymentSelected_trimmed);
 				
 				cod_fee = localStorage.getItem('cubo_checkout_sub_total');
-				console.log('http://192.168.1.8:8000/api/lalamove-integration-api/quotation/web/'
+				console.log('https://cubo.market/api/lalamove-integration-api/quotation/web/'
 					+ merchant_contact
 					+'/'+merchant_contact_phone_no
 					+'/'+merchant_full_address
@@ -861,7 +861,7 @@
 
 				$.ajax({
 					type: 'POST',
-					url: 'http://192.168.1.8:8000/api/lalamove-integration-api/quotation/web/'
+					url: 'https://cubo.market/api/lalamove-integration-api/quotation/web/'
 					+ merchant_contact
 					+'/'+merchant_contact_phone_no
 					+'/'+merchant_full_address
@@ -1426,7 +1426,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url: 'http://192.168.1.8:8000/api/lalamove-integration-api/quotation/web',
+						url: 'https://cubo.market/api/lalamove-integration-api/quotation/web',
 						contentType: 'application/json',
 						headers: {			   
 							'Content-Type': 'application/json',
@@ -1473,7 +1473,7 @@
 							
 					$.ajax({
 						type: 'POST',
-						url: 'http://192.168.1.8:8000/api/checkout-order-send-seller-web/20/'+cubo_login_id,
+						url: 'https://cubo.market/api/checkout-order-send-seller-web/20/'+cubo_login_id,
 						
 						headers: {							
 							

@@ -9,8 +9,8 @@ function loadProducts(){
     var individual_template = ``;
     var individual_modal_template = ``;
 
-    // fetch('http://192.168.1.8:8000/api/all_merchant_products/20')
-	fetch('http://192.168.1.8:8000/api/all_merchant_products/20')
+    // fetch('https://cubo.market/api/all_merchant_products/20')
+	fetch('https://cubo.market/api/all_merchant_products/20')
     .then((response) => {
         return response.json();
     })
@@ -24,7 +24,7 @@ function loadProducts(){
                 <div class="minimal_product_item">
                     <div class="tab-content">
                         <div id="ptab1_1" class="tab-pane active">
-                            <img src="http://192.168.1.8:8000/`+myJson[c].image_one+`" alt="image_not_found">
+                            <img src="https://cubo.market/`+myJson[c].image_one+`" alt="image_not_found">
                         </div>
                         
                     </div>
@@ -66,7 +66,7 @@ function loadProducts(){
 							<span aria-hidden="true">&times;</span>
 						</button>
 						<div class="item_image">
-							<img src="http://192.168.1.8:8000/`+myJson[c].image_one+`" alt="image_not_found">
+							<img src="https://cubo.market/`+myJson[c].image_one+`" alt="image_not_found">
 						</div>
 						<div class="item_content">
 							<h2 class="item_title mb_15">`+myJson[c].name+`</h2>
@@ -143,7 +143,7 @@ function loadCurrentCart(){
 
 	$.ajax({
 		type: 'POST',
-		url: 'http://192.168.1.8:8000/api/viewMyCartWeb/'+email,
+		url: 'https://cubo.market/api/viewMyCartWeb/'+email,
 		contentType: 'application/json',
 		headers: {			   
 			   'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ function loadCurrentCart(){
 	  
 				  <li>
 					  <div class="item_image">
-						  <img src="http://192.168.1.8:8000/`+onJson[c].image_one+`" alt="image_not_found">
+						  <img src="https://cubo.market/`+onJson[c].image_one+`" alt="image_not_found">
 					  </div>
 					  <div class="item_content">
 						  <h4 class="item_title">`+onJson[c].name+`</h4>
@@ -238,7 +238,7 @@ function clearCart(itemid, sale_price){
 
 		$.ajax({
 			type: 'POST',
-			url: 'http://192.168.1.8:8000/api/addToCartWeb/'+email+'/'+itemid+'/0',
+			url: 'https://cubo.market/api/addToCartWeb/'+email+'/'+itemid+'/0',
 			contentType: 'application/json',
 			headers: {			   
 			   	'Content-Type': 'application/json',
@@ -300,7 +300,7 @@ function clearCartCheckout(itemid, sale_price){
 
 		$.ajax({
 			type: 'POST',
-			url: 'http://192.168.1.8:8000/api/addToCartWeb/'+email+'/'+itemid+'/0',
+			url: 'https://cubo.market/api/addToCartWeb/'+email+'/'+itemid+'/0',
 			contentType: 'application/json',
 			headers: {			   
 			   	'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ function addToCartWithQuantity(itemid, sale_price){
 
 		$.ajax({
 			type: 'POST',
-			url: 'http://192.168.1.8:8000/api/addToCartWeb/'+email+'/'+itemid+'/'+quantity,
+			url: 'https://cubo.market/api/addToCartWeb/'+email+'/'+itemid+'/'+quantity,
 			contentType: 'application/json',
 			headers: {			   
 			   	'Content-Type': 'application/json',
@@ -399,7 +399,7 @@ function addToCart(itemid, sale_price){
 
 		$.ajax({
 			type: 'POST',
-			url: 'http://192.168.1.8:8000/api/addToCartWeb/'+email+'/'+itemid+'/1',
+			url: 'https://cubo.market/api/addToCartWeb/'+email+'/'+itemid+'/1',
 			contentType: 'application/json',
 			headers: {			   
 			   	'Content-Type': 'application/json',
@@ -487,7 +487,7 @@ function logout_user(){
 
 	$.ajax({
 		type: 'POST',
-		url: 'http://192.168.1.8:8000/api/logout',
+		url: 'https://cubo.market/api/logout',
 		contentType: 'application/json',
 		headers: {
 		   'Authorization': 'Bearer ' + currentToken

@@ -17,7 +17,7 @@ function login() {
 
 	$.ajax({
 		type: 'POST',
-		url: 'http://192.168.1.8:8000/api/login',
+		url: 'https://cubo.market/api/login',
 		data: {
 			
 			'email': username_input,
