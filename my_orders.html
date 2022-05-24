@@ -130,11 +130,7 @@
 								</a>
 
 								<ul class="mh_action_btns ul_li clearfix">
-									<li>
-										<button type="button" class="search_btn" data-toggle="collapse" data-target="#search_body_collapse" aria-expanded="false" aria-controls="search_body_collapse">
-											<i class="fal fa-search"></i>
-										</button>
-									</li>
+									
 									<li>
 										<button type="button" class="user_btn collapsed" data-toggle="collapse" data-target="#use_deropdown" aria-expanded="false" aria-controls="use_deropdown">
 											<i class="fal fa-user"></i>
@@ -183,21 +179,17 @@
 						<div class="col-lg-6">
 							<nav class="main_menu clearfix">
 								<ul class="ul_li_center clearfix">
-									<li><a href="#!">Home</a></li>									
-									<li><a href="#!">Shop</a></li>									
-									<li><a href="#!">About us</a></li>
-									<li><a href="#!">Contact us</a></li>
+									<li><a href="/">Home</a></li>									
+									<li><a href="/">Shop</a></li>									
+									<li><a href="/">About us</a></li>
+									<li><a href="/">Contact us</a></li>
 								</ul>
 							</nav>
 						</div>
 
 						<div class="col-lg-3">
 							<ul class="action_btns_group ul_li_right clearfix">
-								<li>
-									<button type="button" class="search_btn" data-toggle="collapse" data-target="#search_body_collapse" aria-expanded="false" aria-controls="search_body_collapse">
-										<i class="fal fa-search"></i>
-									</button>
-								</li>
+								
 								<li>
 									<button type="button" class="user_btn" data-toggle="collapse" data-target="#use_deropdown" aria-expanded="false" aria-controls="use_deropdown">
 										<i class="fal fa-user"></i>
@@ -368,6 +360,7 @@
 									<th>Order #</th>									
 									<th>Status</th>
 									<th>Sub Total</th>
+									<th>&nbsp;</th>
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
@@ -564,6 +557,12 @@
 
 				return true;
 			}
+
+			function trackerTab(url){
+
+				window.open(url, "_blank");
+
+			}
 			var email = localStorage.getItem('cubo_login_email');
 			var currentToken = localStorage.getItem('cubo_app_token');
 			var login_id = localStorage.getItem('cubo_login_id');
@@ -589,21 +588,24 @@
 				success: function(onJson) {		
 
 					console.log(onJson);
-					for(var c = 0 ; c < onJson.length ; c++){
+					for(var c = 0 ; c < onJson.length ; c++){				
+						var track_lalamove_button = '';
 
-						
-						
-						
 
-						order_row += `				  
-	  
+						if(onJson[c].lalamove_link.trim() != ""){
+
+							track_lalamove_button = `<td><button class='btn btn-danger btn-xs' onclick="javascript:trackerTab('`+onJson[c].lalamove_link+`');">TRACK</button></td>`;
+
+						}
+						order_row += `	  
 						<tr>
 							<td  onclick="javascript:openModal('quickview_modal_order_`+onJson[c].order_number+`');" ><span style="text-decoration: underline;cursor: pointer;">`+
 								onJson[c].order_number+`</span><br>`+onJson[c].order_date+`</td>
 							
-							<td>`+onJson[c].order_status+`<span id="payment_status_`+onJson[c].order_number+`"></span></td>
+							<td>`+onJson[c].order_status+`<br><span id="payment_status_`+onJson[c].order_number+`"></span></td>
 							<td>`+parseFloat(onJson[c].order_total).toFixed(2)+`</td>
 							<td><button class='btn btn-success btn-xs' onclick="javascript:openModal('quickview_modal_order_`+onJson[c].order_number+`');">View</button></td>
+							`+track_lalamove_button+`
 						</tr>			  
 
 						`;
@@ -645,7 +647,7 @@
 
 						var pay_now_button = ``;
 						if(onJson[c].order_status == "Processing Order" && onJson[c].payment_method == "3"){
-							pay_now_button = `<button type="button" class="custom_btn bg_default_black" data-dismiss="modal" onClick="javascript:pay_cc_modal('pay_cc_modal_`+onJson[c].order_number+`', '`+onJson[c].order_number+`');">Pay Now</button>`;
+							pay_now_button = `<button type="button" id="pay_cc_button_`+onJson[c].order_number+`"  class="custom_btn bg_default_black" data-dismiss="modal" onClick="javascript:pay_cc_modal('pay_cc_modal_`+onJson[c].order_number+`', '`+onJson[c].order_number+`');">Pay Now</button>`;
 
 							pay_cc_modal += `
 								<div class="quickview_modal modal fade show"  id="pay_cc_modal_`+onJson[c].order_number+`" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
@@ -791,7 +793,8 @@
 										<span aria-hidden="true">×</span>
 									</button>				
 									<br><br>
-									<h5 >`+onJson[c].order_number+`</h5>
+									<h5>`+onJson[c].order_number+`</h5>
+									<span id="pay_status_modal_`+onJson[c].order_number+`"></span>
 									<h6>`+onJson[c].order_status+`</h6>			
 									<h6>`+onJson[c].order_date+`</h6>
 									<h2 class="item_title mb_15" id="order_transction_number"></h2>
@@ -846,45 +849,13 @@
 
 					for(var c = 0 ; c < onJson.length ; c++){
 
-						if(onJson[c].paymongo_pi.trim() != ""){
-							console.log(onJson[c].paymongo_pi, onJson[c].order_number);
-							$.ajax({
-							type: 'GET',
-							url: 'https://api.paymongo.com/v1/payment_intents/'+onJson[c].paymongo_pi,
-							
-							headers: {							
-								
-								'Accept' : 'application/json',
-								'Authorization' : 'Basic c2tfbGl2ZV8xNDEyRVU4VEx0Y0J6NEI3ajZ2a1loenM6',
-							},
-							data: {
-							
-							
 						
-							},
-							success: function(pmJson) {		
 
-								console.log(pmJson, pmJson.data['id']);																				
-
-								const options = {method: 'GET', headers: {Accept: 'application/json', Authorization : 'Basic c2tfbGl2ZV8xNDEyRVU4VEx0Y0J6NEI3ajZ2a1loenM6'}};
-								var status_resp = "";
-								fetch('https://api.paymongo.com/v1/payment_intents/'+pmJson.data['id'], options)
-								.then(response => response.json())
-								.then((response) => {
-									status_resp = response.data['attributes'].status;
-									console.log(status_resp);
-
-									//$("#payment_status_"+onJson[c].order_number).text(status_resp);
-									$("#payment_status_"+onJson[c].order_number).html("testing <b>1 2 3</b>");
-
-									//payment_status_"`+onJson[c].order_number+`
-								})
-								.catch(err => console.error(err));
-								
-								//
-
-							}
-							});
+						if(onJson[c].paymongo_pi.trim() != ""){
+							
+							var current_trasncation_code = onJson[c].order_number;
+							console.log("current_trasncation_code", current_trasncation_code);
+							getPaymentStatus(onJson[c].order_number, onJson[c].paymongo_pi);
 						}
 
 
@@ -914,6 +885,69 @@
 				}
 			})
 			;
+
+			function getPaymentStatus(orderNumber, paymongo_pi){
+
+				$.ajax({
+
+				type: 'GET',
+				url: 'https://api.paymongo.com/v1/payment_intents/'+paymongo_pi,
+
+				headers: {							
+					
+					'Accept' : 'application/json',
+					'Authorization' : 'Basic c2tfbGl2ZV8xNDEyRVU4VEx0Y0J6NEI3ajZ2a1loenM6',
+				},
+				data: {
+
+
+
+				},
+				success: function(pmJson) {																										
+
+					const options = {method: 'GET', headers: {Accept: 'application/json', Authorization : 'Basic c2tfbGl2ZV8xNDEyRVU4VEx0Y0J6NEI3ajZ2a1loenM6'}};
+					var status_resp = "";
+					fetch('https://api.paymongo.com/v1/payment_intents/'+pmJson.data['id'], options)
+					.then(response => response.json())
+					.then((response) => {
+						status_resp = response.data['attributes'].status;					
+						//$("#payment_status_"+onJson[c].order_number).text(status_resp);
+						var id_status = "payment_status_"+orderNumber;
+						var id_modal_status = "pay_status_modal_"+orderNumber;
+						
+						
+						if("succeeded" == status_resp){
+							document.getElementById(id_status).textContent = "Payment: " + status_resp.toUpperCase();
+							document.getElementById(id_status).style.color = "green";
+
+							
+
+							document.getElementById(id_modal_status).textContent = "Payment: " + status_resp.toUpperCase();
+							document.getElementById(id_modal_status).style.color = "green";
+
+							document.getElementById("pay_cc_button_"+orderNumber).style.display = 'none';
+
+							
+						}						
+						else{
+							document.getElementById(id_status).textContent = "Payment:" + status_resp.toUpperCase();
+							document.getElementById(id_status).style.color = "orange";
+
+							document.getElementById(id_modal_status).textContent = "Payment:" + status_resp.toUpperCase();
+							document.getElementById(id_modal_status).style.color = "orange";
+						}
+						
+
+						//payment_status_"`+onJson[c].order_number+`
+					})
+					.catch(err => console.error(err));
+					
+					//
+
+				}
+				});
+
+			}
 			function sending_payment(order_number){
 				console.log('sending payment' + order_number);
 
